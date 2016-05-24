@@ -1,0 +1,15 @@
+{
+  define factorial {
+    if (x==0)
+    {
+      return 1;
+    }
+    else
+    {
+      return x * factorial(x=x-1);
+    };
+  };
+  print_(x=factorial(x=12));
+}
+
+

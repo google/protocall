@@ -1,0 +1,403 @@
+
+
+class Identifier:
+  def __init__(self, identifier):
+    self.identifier = identifier
+
+  def __getitem__(self, item):
+    if item == 0:
+      return self.identifier
+    else:
+      raise IndexError
+
+  def __repr__(self):
+    return self.identifier
+
+class ArrayRef:
+  def __init__(self, identifier, index):
+    self.identifier = identifier
+    self.index = index
+
+  def __getitem__(self, item):
+    if item == 0:
+      return self.identifier
+    if item == 0:
+      return self.index
+    else:
+      raise IndexError
+
+  def __repr__(self):
+    return self.identifier.identifier + "[" + str(self.index) + "]"
+
+class Integer:
+  def __init__(self, value):
+    self.value = value
+
+  def __getitem__(self, item):
+    if item == 0:
+      return self.value
+    else:
+      raise IndexError
+
+  def __repr__(self):
+    return str(self.value)
+
+class String:
+  def __init__(self, value):
+    self.value = value
+
+  def __getitem__(self, item):
+    if item == 0:
+      return self.value
+    else:
+      raise IndexError
+
+  def __repr__(self):
+    return self.value
+
+class Boolean:
+  def __init__(self, value):
+    self.value = value
+
+  def __getitem__(self, item):
+    if item == 0:
+      return self.value
+    else:
+      raise IndexError
+
+  def __repr__(self):
+    return str(self.value)
+
+class Proto:
+  def __init__(self, proto):
+    self.proto = proto
+
+  def __getitem__(self, item):
+    if item == 0:
+      return self.proto
+    else:
+      raise IndexError
+
+  def __repr__(self):
+    return str(self.proto)
+
+class Array:
+  def __init__(self, elements):
+    self.elements = []
+    for element in elements:
+      self.elements.append(element)
+
+  def __getitem__(self, item):
+    return self.elements[item]
+
+  def __repr__(self):
+    return "{" + [element for element in elements] + "}"
+
+class SignOperator:
+  def __init__(self, operator, value):
+    self.operator = operator
+    self.value = value
+
+  def __getitem__(self, item):
+    if item == 0:
+      return self.operator
+    elif item == 1:
+      return self.value
+    else:
+      raise IndexError
+
+  def __repr__(self):
+    return "%s%s" % (self.operator, repr(self.value))
+
+class ArithmeticOperator:
+  def __init__(self, left, operator, right):
+    self.left = left
+    self.operator = operator
+    self.right = right
+
+  def __getitem__(self, item):
+    if item == 0:
+      return self.left
+    elif item == 1:
+      return self.operator
+    elif item == 2:
+      return self.right
+    else:
+      raise IndexError
+
+  def __repr__(self):
+    return "(%s %s %s)" % (repr(self.left), self.operator, repr(self.right))
+
+class ComparisonOperator:
+  def __init__(self, left, operator, right):
+    self.left = left
+    self.operator = operator
+    self.right = right
+
+  def __getitem__(self, item):
+    if item == 0:
+      return self.left
+    elif item == 1:
+      return self.operator
+    elif item == 2:
+      return self.right
+    else:
+      raise IndexError
+
+  def __repr__(self):
+    return "(%s %s %s)" % (repr(self.left), self.operator, repr(self.right))
+
+
+class Expression:
+  def __init__(self, expression):
+    self.expression = expression
+
+  def __getitem__(self, item):
+    return self.expression[item]
+
+  def __repr__(self):
+    return str(self.expression)
+
+
+class Assignment:
+  def __init__(self, identifier, expression):
+    self.identifier = identifier
+    self.expression = expression
+
+  def __getitem__(self, item):
+    if item == 0:
+      return self.identifier
+    elif item == 1:
+      return self.expression
+    else:
+      raise IndexError
+
+  def __repr__(self):
+    return "%s = %s" % (self.identifier, repr(self.expression))
+
+class ArrayAssignment:
+  def __init__(self, array_ref, expression):
+    self.array_ref = array_ref
+    self.expression = expression
+
+  def __getitem__(self, item):
+    if item == 0:
+      return self.array_ref
+    elif item == 1:
+      return self.expression
+    else:
+      raise IndexError
+
+  def __repr__(self):
+    return "%s = %s" % (self.array_ref, repr(self.expression))
+
+
+class Argument:
+  def __init__(self, identifier, expression):
+    self.identifier = identifier
+    self.expression = expression
+
+  def __getitem__(self, item):
+    if item == 0:
+      return self.identifier
+    elif item == 1:
+      return self.expression
+    else:
+      raise IndexError
+
+  def __repr__(self):
+    return "%s = %s" % (self.identifier, repr(self.expression))
+
+class Call:
+  def __init__(self, identifier, args):
+    self.identifier = identifier
+    self.args = [Argument(arg[0], arg[1]) for arg in args]
+
+  def __getitem__(self, item):
+    if item == 0:
+      return self.identifier
+    elif item == 1:
+      return self.args
+    else:
+      raise IndexError
+
+  def __repr__(self):
+    return "%s(%s)" % (self.identifier, ",".join([repr(arg) for arg in self.args]))
+
+
+class Return:
+  def __init__(self, expression):
+    self.expression = expression
+
+  def __getitem__(self, item):
+    if item == 0:
+      return self.expression
+    else:
+      raise IndexError
+
+  def __repr__(self):
+    return "return %s" % repr(self.expression)
+
+class Define:
+  def __init__(self, identifier, scope):
+    self.identifier = identifier
+    self.scope = scope
+
+  def __getitem__(self, item):
+    if item == 0:
+      return self.identifier
+    elif item == 1:
+      return self.scope
+    else:
+      raise IndexError
+
+  def __repr__(self):
+    return "define %s %s" % (self.identifier, self.scope)
+
+
+class IfScope:
+  def __init__(self, expression, scope):
+    self.expression = expression
+    self.scope = scope
+
+  def __getitem__(self, item):
+    if item == 0:
+      return self.expression
+    elif item == 1:
+      return self.scope
+
+  def __repr__(self):
+    return "if (%s) %s" % (self.expression, self.scope)
+
+
+class ElifScope:
+  def __init__(self, expression, scope):
+    self.expression = expression
+    self.scope = scope
+
+  def __getitem__(self, item):
+    if item == 0:
+      return self.expression
+    elif item == 1:
+      return self.scope
+    else:
+      raise IndexError
+
+  def __repr__(self):
+    return "elif (%s) %s" % (self.expression, self.scope)
+
+
+class ElifScopes:
+  def __init__(self, scopes):
+    self.scopes = [scope[0] for scope in scopes]
+
+  def __getitem__(self, item):
+    return self.scopes[item]
+
+  def __repr__(self):
+    return "%s" % (" ".join([repr(scope) for scope in self.scopes]))
+
+
+class ElseScope:
+  def __init__(self, scope):
+    self.scope = scope
+
+  def __getitem__(self, item):
+    if item == 0:
+      return self.scope
+    else:
+      raise IndexError
+
+  def __repr__(self):
+    return "else %s" % (self.scope)
+
+
+class Conditional:
+  def __init__(self, conditional):
+    if_scope = conditional[0]
+    elif_scopes = None
+    else_scope = None
+    if len(conditional) > 1:
+      elif_scopes = conditional[1]
+    if len(conditional) > 2:
+      else_scope = conditional[2]
+    self.if_scope = if_scope
+    self.elif_scopes = elif_scopes
+    self.else_scope = else_scope
+
+  def __getitem__(self, item):
+    if item == 0:
+      return self.if_scope
+    elif item == 1:
+      return self.elif_scopes
+    elif item == 2:
+      return self.else_scopes
+    else:
+      raise IndexError
+
+  def __repr__(self):
+    result = [repr(self.if_scope)]
+    if self.elif_scopes:
+      result.append(repr(self.elif_scopes))
+    if self.else_scope:
+      result.append(repr(self.else_scope))
+    return " ".join(result)
+
+
+class While:
+  def __init__(self, expression, scope):
+    self.expression = expression
+    self.scope = scope
+
+  def __getitem__(self, item):
+    if item == 0:
+      return self.expression
+    elif item == 1:
+      return self.scope
+    else:
+      raise IndexError
+
+  def __repr__(self):
+    return "while (%s) %s" % (self.expression, self.scope)
+
+
+class Statement:
+  def __init__(self, statement):
+    self.statement = statement
+
+  def __getitem__(self, item):
+    if item == 0:
+      return self.statement
+    else:
+      raise IndexError
+
+  def __repr__(self):
+    return "%s;" % (self.statement)
+
+
+class Block:
+  def __init__(self, block):
+    self.block = block
+
+  def __getitem__(self, item):
+    if item == 0:
+      return self.block
+    else:
+      raise IndexError
+
+  def __repr__(self):
+    return " ".join([repr(statement) for statement in self.block])
+
+
+class Scope:
+  def __init__(self, scope):
+    self.scope = scope
+
+  def __getitem__(self, item):
+    if item == 0:
+      return self.scope
+    else:
+      raise IndexError
+
+  def __repr__(self):
+    return "{ %s }" % (repr(self.scope))

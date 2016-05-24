@@ -1,0 +1,7 @@
+{
+  define f {
+    print_(x=x);
+    return 5;
+  };
+  return f(x=5,y=6);
+}

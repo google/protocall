@@ -1,0 +1,9 @@
+{
+  define f {
+    print_(x=x);
+    return 0;
+  };
+
+  y=f(x=5);
+  return 0;
+}

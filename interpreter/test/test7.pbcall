@@ -1,0 +1,6 @@
+{
+  define f {
+    return 6;
+  };
+  print_(x=f());
+}

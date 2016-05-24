@@ -1,0 +1,16 @@
+{
+  define f {
+    if (x == 0) {
+      return 0;
+    }
+    elif (x == 1) {
+      return 1;
+    }
+    else {
+      a = f(x=x-2);
+      b = f(x=x-1);
+      return a+b;
+    };
+  };
+  return f(x=5);
+}

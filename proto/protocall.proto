@@ -1,0 +1,148 @@
+syntax = "proto2";
+
+package protocall;
+option py_api_version = 2;
+
+message Integer {
+  required int32 value = 1;
+}
+
+message String {
+  required string value = 1;
+}
+
+message Boolean {
+  required bool value = 1;
+}
+
+message NoneType {
+}
+
+message Array {
+  repeated Expression element = 1;
+}
+
+message Literal {
+  oneof literal {
+    Integer integer = 1;
+    String string = 2;
+    Boolean boolean = 3;
+    Array array = 4;
+  }
+}
+
+message Identifier {
+  required string name = 1;
+}
+
+message ArrayRef {
+  required Identifier identifier = 1;
+  required Integer index = 2;
+}
+
+message Atom {
+  oneof atom {
+    Literal literal = 1;
+    Identifier identifier = 2;
+    Expression expression = 3;
+    ArrayRef array_ref = 4;
+  }
+}
+
+message ArithmeticOperator {
+  // The operator that should be applied to arithmetic expressions
+  enum Op {
+    PLUS = 1;
+    MINUS = 2;
+    MULTIPLY = 3;
+    DIVIDE = 4;
+  }
+  required Expression left = 1;
+  required Expression right = 2;
+  required Op operator = 3;
+}
+
+message ComparisonOperator {
+  // The operator that should be applied to comparison expressions
+  enum Op {
+    EQUALS = 5;
+    LESS_THAN = 6;
+    GREATER_THAN = 7;
+  }
+  required Expression left = 1;
+  required Expression right = 2;
+  required Op operator = 3;
+}
+
+message Expression {
+  oneof expression {
+    Atom atom = 1;
+    ArithmeticOperator arithmetic_operator = 2;
+    ComparisonOperator comparison_operator = 3;
+    Call call = 4;
+  }
+}
+
+message Assignment {
+  required Identifier identifier = 1;
+  required Expression expression = 2;
+}
+
+message ArrayAssignment {
+  required ArrayRef array_ref = 1;
+  required Expression expression = 2;
+}
+
+message ExpressionScope {
+  required Expression expression = 1;
+  required Scope scope = 2;
+}
+
+message Conditional {
+  required ExpressionScope if_scope = 1;
+  repeated ExpressionScope elif_scope = 2;
+  required Scope else_scope = 3;
+}
+
+message Argument {
+  required Identifier identifier = 1;
+  required Expression expression = 2;
+}
+
+message Call {
+  required Identifier identifier = 1;
+  repeated Argument argument = 2;
+}
+
+message Return {
+  required Expression expression = 1;
+}
+
+message While {
+  required ExpressionScope expression_scope = 1;
+}
+
+message Define {
+  required Identifier identifier = 1;
+  required Scope scope = 2;
+}
+
+message Statement {
+  oneof Type {
+    Assignment assignment = 1;
+    Conditional conditional = 2;
+    Call call = 3;
+    Return return_ = 4;
+    While while_ = 5;
+    Define define = 6;
+    ArrayAssignment array_assignment = 7;
+  }
+}
+
+message Block {
+  repeated Statement statement = 1;
+}
+
+message Scope {
+  required Block block = 1;
+}

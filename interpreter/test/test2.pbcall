@@ -1,0 +1,19 @@
+{
+  x=5;
+  print_(x=x);
+  while (x > 0) {
+    print_(x=x);
+    x = x - 1;
+  };
+  print_(x=x);
+  if (x>5) {
+    print_(x=0);
+  }
+  elif (x<0) {
+    print_(x=1);
+  }
+  else {
+    print_(x=2);
+  };
+  return x;
+}

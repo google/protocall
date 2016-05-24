@@ -1,0 +1,9 @@
+{
+  x = 2;
+  a = {5, 6, 7};
+  print_(a=a);
+  a[0] = 6;
+  print_(a=a);
+  append(a=a, v=5);
+  print_(a=a);
+}
