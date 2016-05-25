@@ -43,6 +43,7 @@ A simple SeeThruP0 session looks like this.  Lines starting with "#" are
 commentary about what is happening.  Lines starting with "> " are user commands.
 The interpreter prints the result of evaluating each line.
 
+```
 # Assign the integer value 5 to the identifier 'x'
 > x = 5;
 literal {
@@ -57,9 +58,11 @@ literal {
 x: 5
 
 None
+```
 
 The assignment statement above is expressed in protocall as:
 
+```
 statement {
   assignment {
     identifier {
@@ -76,9 +79,11 @@ statement {
     }
   }
 }
+```
 
 The print statement is expressed in protocall as:
 
+```
 statement {
   call {
     identifier {
@@ -98,8 +103,10 @@ statement {
     }
   }
 }
+```
 
 A simple SeeThruP0 program with a loop.
+```
 {
   x=5;
   while (x > 0) {
@@ -107,9 +114,11 @@ A simple SeeThruP0 program with a loop.
     x = x - 1;
   };
 }
+```
 
 A simple program to compute Fibonacci numbers.  This demonstates scoping,
 function definition and conditionals.
+```
 {
   define f {
     if (x == 0) {
@@ -126,6 +135,7 @@ function definition and conditionals.
   };
   return f(x=5);
 }
+```
 
 SeeThruP0 uses { and } for scoping- program, function and conditional body.
 Each scope induces a new local variable space.  Arguments are passed to function
@@ -137,12 +147,12 @@ by copy; use return values to communicate.
 
 
 TODO(dek):
- documentation
- proto type/assignment support
- better proto type support (various ints)
- FFI support
- RPC support
- namespaces
- interpreter multi-line support
- imports of other files
+* documentation
+* proto type/assignment support
+* better proto type support (various ints)
+* FFI support
+* RPC support
+* namespaces
+* interpreter multi-line support
+* imports of other files
  
