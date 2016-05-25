@@ -1,6 +1,6 @@
-protocall is an experimental Google programming language.  The purpose of
-protocall is to explore a number of programming approaches with the goal of
-making distributed systems easier to develop.
+protocall is an experimental programming language.  It is not an official Google
+product.  The purpose of protocall is to explore a number of programming
+approaches with the goal of making distributed systems easier to develop.
 
 Protocall adopts a number of philosophical principles:
 
@@ -128,7 +128,7 @@ function definition and conditionals.
 }
 
 SeeThruP0 uses { and } for scoping- program, function and conditional body.
-Each scope induces a new local variable space.  Argument are passed to function
+Each scope induces a new local variable space.  Arguments are passed to function
 by copy; use return values to communicate.
 
 
