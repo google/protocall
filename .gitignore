@@ -1,5 +1,6 @@
-bazel-bin/
-bazel-genfiles/
-bazel-out/
-baze-protocall/
-bazel-testlogs/
+bazel-bin
+bazel-genfiles
+bazel-out
+bazel-protocall
+bazel-testlogs
+google/protobuf
