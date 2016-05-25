@@ -5,8 +5,8 @@ py_library(
         "grammar.py",
     ],
     deps = [
+        "//external:pyparsing",
         "//protocall/proto/text_format_parser",
-        # "//third_party/py/pyparsing",
     ],
 )
 
