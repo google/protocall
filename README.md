@@ -1,5 +1,5 @@
-protocall is an experimental programming language.  It is not an official Google
-product.  The purpose of protocall is to explore a number of programming
+protocall is an experimental programming language.  This is not an official
+Google product.  The purpose of protocall is to explore a number of programming
 approaches with the goal of making distributed systems easier to develop.
 
 Protocall adopts a number of philosophical principles:
