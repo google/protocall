@@ -43,27 +43,24 @@ py_binary(
         ":parser_converter",
         "//protocall/proto:protocall_proto_pb2",
         "//protocall/runtime:protocall",
-        # "//third_party/py/readline",
     ],
 )
 
-# py_test(
-#     name = "parser_test",
-#     srcs = ["parser_test.py"],
-#     deps = [
-#         ":parser",
-#         ":parser_converter",
-#         "//testing/pybase",
-#     ],
-# )
+py_test(
+    name = "parser_test",
+    srcs = ["parser_test.py"],
+    deps = [
+        ":parser",
+        ":parser_converter",
+    ],
+)
 
-# py_test(
-#     name = "roundtrip_test",
-#     srcs = ["roundtrip_test.py"],
-#     deps = [
-#         ":parser",
-#         ":parser_converter",
-#         "//protocallruntime:protocall",
-#         "//testing/pybase",
-#     ],
-# )
+py_test(
+    name = "roundtrip_test",
+    srcs = ["roundtrip_test.py"],
+    deps = [
+        ":parser",
+        ":parser_converter",
+        "//protocall/runtime:protocall",
+    ],
+)

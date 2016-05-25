@@ -12,9 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """Tests for protocall.interpreter.parser."""
-
-import googletest
-
+import unittest
 
 from pyparsing import ParseResults
 from protocall.interpreter import parser_converter
@@ -22,7 +20,7 @@ from protocall.interpreter import parser_converter
 from protocall.interpreter.grammar import expression, statement, assignment, call, return_expression, block, scope, define_function_scope, while_scope, if_scope, elif_scope, elif_scopes, else_scope, conditional
 
 
-class ParserTest(googletest.TestCase):
+class ParserTest(unittest.TestCase):
 
   def testExpression(self):
     result = expression.parseString("(4 / x) - 2 > 5")
@@ -90,4 +88,4 @@ class ParserTest(googletest.TestCase):
 
 
 if __name__ == '__main__':
-  googletest.main()
+  unittest.main()

@@ -11,14 +11,14 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-#py_test(
-#    name = "runtime_test",
-#    srcs = ["runtime_test.py"],
-#    deps = [
-#        ":protocall",
-#        "//testing/pybase",
-#    ],
-#)
+
+py_test(
+    name = "runtime_test",
+    srcs = ["runtime_test.py"],
+    deps = [
+        ":protocall",
+    ],
+)
 
 py_library(
     name = "protocall",
@@ -34,8 +34,6 @@ py_library(
     ],
     visibility = ["//visibility:public"],
     deps = [
-        # "//net/proto",
-        # "//google/proto",
         "//protocall/proto:protocall_proto_pb2",
     ],
 )
