@@ -9,10 +9,10 @@ protocall.  Performance is a non-goal.
 
 1) Protocall programs are expressed using Google Protocol Buffers.  Entire
 programs, statements, identifiers, and types are all represented using a simple
-protocall schema.  Programs and all data can be serialized, deserialized, and
-manipulated using the protocol buffer API outside of the language.
+protocol buffer schema.  Programs and all data can be serialized, deserialized,
+and manipulated using the protocol buffer API outside of the language.
 
-2) The Protocall runtime is a simple VM that executes protocall protocol
+2) The protocall runtime is a simple VM that executes protocall protocol
 buffers.
 
 3) While simple, the language contains primitive types, arrays, structured
