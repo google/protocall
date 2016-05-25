@@ -1,5 +1,4 @@
 TODO(dek):
- array support
  FFI support
  proto support
  RPC support
