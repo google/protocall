@@ -1,1 +1,4 @@
-# TODO(dek): describe this package.
+filegroup(
+    name = "dummy",
+    visibility = ["//visibility:public"],
+)

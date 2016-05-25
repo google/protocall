@@ -7,9 +7,9 @@ import readline
 from protocall.runtime import dump
 from pyparsing import ParseException
 from protocall.interpreter.grammar import block, scope
-from protocall.runtime import protocall
+from protocall.runtime import vm
 
-pr = protocall.Protocall()
+pr = vm.Protocall()
 # pr.enable_tracing()
 
 if len(sys.argv) == 1:

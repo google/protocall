@@ -2,7 +2,7 @@ py_binary(
     name = "generate_text",
     srcs = ["generate_text.py"],
     deps = [
-        "//experimental/users/dek/protocall/proto:test_proto_pb2",
+        "//protocall/proto:test_proto_pb2",
     ],
 )
 
@@ -16,8 +16,9 @@ py_library(
 py_library(
     name = "text_format_parser",
     srcs = ["text_format_parser.py"],
+    visibility = ["//visibility:public"],
     deps = [
         ":AST",
-        "//third_party/py/pyparsing",
+        # "//third_party/py/pyparsing",
     ],
 )

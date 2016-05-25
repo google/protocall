@@ -5,8 +5,8 @@ py_library(
         "grammar.py",
     ],
     deps = [
-        "//experimental/users/dek/protocall/proto/text_format_parser",
-        "//third_party/py/pyparsing",
+        "//protocall/proto/text_format_parser",
+        # "//third_party/py/pyparsing",
     ],
 )
 
@@ -16,7 +16,7 @@ py_library(
         "parser_converter.py",
     ],
     deps = [
-        "//experimental/users/dek/protocall/proto:protocall_proto_pb2",
+        "//protocall/proto:protocall_proto_pb2",
     ],
 )
 
@@ -28,29 +28,29 @@ py_binary(
     deps = [
         ":parser",
         ":parser_converter",
-        "//experimental/users/dek/protocall/proto:protocall_proto_pb2",
-        "//experimental/users/dek/protocall/runtime:protocall",
-        "//third_party/py/readline",
+        "//protocall/proto:protocall_proto_pb2",
+        "//protocall/runtime:protocall",
+        # "//third_party/py/readline",
     ],
 )
 
-py_test(
-    name = "parser_test",
-    srcs = ["parser_test.py"],
-    deps = [
-        ":parser",
-        ":parser_converter",
-        "//testing/pybase",
-    ],
-)
+# py_test(
+#     name = "parser_test",
+#     srcs = ["parser_test.py"],
+#     deps = [
+#         ":parser",
+#         ":parser_converter",
+#         "//testing/pybase",
+#     ],
+# )
 
-py_test(
-    name = "roundtrip_test",
-    srcs = ["roundtrip_test.py"],
-    deps = [
-        ":parser",
-        ":parser_converter",
-        "//experimental/users/dek/protocall/runtime:protocall",
-        "//testing/pybase",
-    ],
-)
+# py_test(
+#     name = "roundtrip_test",
+#     srcs = ["roundtrip_test.py"],
+#     deps = [
+#         ":parser",
+#         ":parser_converter",
+#         "//protocallruntime:protocall",
+#         "//testing/pybase",
+#     ],
+# )

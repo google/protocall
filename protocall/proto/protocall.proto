@@ -1,7 +1,7 @@
 syntax = "proto2";
 
 package protocall;
-option py_api_version = 2;
+//option py_api_version = 2;
 
 message Integer {
   required int32 value = 1;
