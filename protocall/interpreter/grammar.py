@@ -88,7 +88,7 @@ string = dblQuotedString
 string.setParseAction(string_fn)
 boolean = (true | false)
 boolean.setParseAction(boolean_fn)
-proto = text_format_parser.parser
+proto = Suppress('<') + text_format_parser.parser + Suppress('>')
 proto.setParseAction(proto_fn)
 
 call = Forward()
