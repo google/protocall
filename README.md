@@ -5,7 +5,7 @@ approaches with the goal of making distributed systems easier to develop.
 Protocall adopts a number of philosophical principles:
 
 0) Simplicity, Flexibility, and Experimentation are the primary goals of
-protocall.  Performance is a non-goal.
+protocall.  Performance and security are (for now) non-goals.
 
 1) Protocall programs are expressed using Google Protocol Buffers.  Entire
 programs, statements, identifiers, and types are all represented using a simple
