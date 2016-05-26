@@ -11,7 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from pyparsing import nestedExpr, Forward, Word, alphas, nums, oneOf, Literal, operatorPrecedence, opAssoc, infixNotation, Suppress, delimitedList, And, Group, OneOrMore, Optional, Or, ZeroOrMore, ParseResults, Keyword, dblQuotedString, cStyleComment
+from pyparsing import nestedExpr, Forward, Word, alphas, nums, oneOf, Literal, operatorPrecedence, opAssoc, infixNotation, Suppress, delimitedList, And, Group, OneOrMore, Optional, Or, ZeroOrMore, ParseResults, Keyword, dblQuotedString, cStyleComment, pythonStyleComment
 from AST import Identifier, ArrayRef, Integer, String, Boolean, Proto, Array, SignOperator, ArithmeticOperator, ComparisonOperator, Expression, Assignment, ArrayAssignment, Call, Return, Define, IfScope, ElifScope, ElifScopes, ElseScope, Conditional, While, Statement, Block, Scope
 from protocall.proto.text_format_parser import text_format_parser
 
@@ -88,7 +88,7 @@ string = dblQuotedString
 string.setParseAction(string_fn)
 boolean = (true | false)
 boolean.setParseAction(boolean_fn)
-proto = Suppress('<') + text_format_parser.parser + Suppress('>')
+proto = identifier + Suppress('<') + text_format_parser.parser + Suppress('>')
 proto.setParseAction(proto_fn)
 
 call = Forward()
@@ -156,9 +156,10 @@ while_scope.setParseAction(while_scope_fn)
 statement = ((array_assignment | assignment | conditional | call | return_expression | while_scope | define_function_scope) + Suppress(';'))
 statement.setParseAction(statement_fn)
 
-block = OneOrMore((statement | cStyleComment))
+block = OneOrMore((statement | cStyleComment | pythonStyleComment))
 block.setParseAction(block_fn)
 block.ignore(cStyleComment)
+block.ignore(pythonStyleComment)
 
 scope << (Suppress(Literal('{')) + Group(block) + Suppress(Literal('}')))
 scope.setParseAction(scope_fn)
