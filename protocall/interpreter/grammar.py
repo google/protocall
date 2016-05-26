@@ -28,7 +28,7 @@ def array_fn(s,l,t):
 def boolean_fn(s,l,t):
   return Boolean(bool(t[0] == 'true'))
 def proto_fn(s,l,t):
-  return Proto(t[0])
+  return Proto(t[0], t[1])
 def signop_fn(s,l,t):
   return SignOperator(*t[0])
 def binop_fn(s,l,t):

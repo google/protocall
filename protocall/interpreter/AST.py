@@ -82,17 +82,20 @@ class Boolean:
     return str(self.value)
 
 class Proto:
-  def __init__(self, proto):
+  def __init__(self, identifier, proto):
+    self.identifier = identifier
     self.proto = proto
 
   def __getitem__(self, item):
     if item == 0:
+      return self.identifier
+    elif item == 1:
       return self.proto
     else:
       raise IndexError
 
   def __repr__(self):
-    return str(self.proto)
+    return "%s<%s>" % (self.identifier, str(self.proto))
 
 class Array:
   def __init__(self, elements):
