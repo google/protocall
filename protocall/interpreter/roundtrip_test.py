@@ -13,16 +13,16 @@
 # limitations under the License.
 """Tests for protocall.interpreter.roundtrip."""
 
-import googletest
+import unittest
 
 from pyparsing import ParseResults
 from protocall.interpreter import parser_converter
 
 from protocall.interpreter.grammar import scope
-from protocall.runtime import protocall
+from protocall.runtime.vm import Protocall
 
 
-class RoundtripTest(googletest.TestCase):
+class RoundtripTest(unittest.TestCase):
 
 
   def testRoundtrip(self):
@@ -54,9 +54,9 @@ class RoundtripTest(googletest.TestCase):
 
     proto = parser_converter.convert_scope(result[0].scope)
     print proto
-    pr = protocall.Protocall()
+    pr = Protocall()
     pr.execute(proto.block)
 
 
 if __name__ == '__main__':
-  googletest.main()
+  unittest.main()
