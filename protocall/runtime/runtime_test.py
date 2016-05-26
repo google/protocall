@@ -13,10 +13,10 @@
 # limitations under the License.
 """Tests for protocall.runtime.runtime."""
 
-import googletest
+import unittest
 
 from protocall.proto import protocall_pb2
-from protocall.runtime.protocall import Protocall
+from protocall.runtime.vm import Protocall
 from protocall.runtime import dump
 
 from protocall.runtime.truth import true, false, literal_true, literal_false
@@ -466,7 +466,7 @@ def test_program():
     return result
 
 
-class RuntimeTest(googletest.TestCase):
+class RuntimeTest(unittest.TestCase):
 
   def testEvaluate(self):
     assert test_evaluate().literal.integer.value == 90
@@ -512,4 +512,4 @@ class RuntimeTest(googletest.TestCase):
 
 
 if __name__ == '__main__':
-  googletest.main()
+  unittest.main()
