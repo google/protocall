@@ -28,6 +28,8 @@ def value(literal):
         return literal.string.value
     elif isinstance(literal, protocall_pb2.Literal) and literal.HasField("array"):
         return '[ ' + ", ".join([str(value(element)) for element in literal.array.element]) + ' ]'
+    elif isinstance(literal, protocall_pb2.Literal) and literal.HasField("proto"):
+        return str(literal.proto.value)
     elif isinstance(literal, protocall_pb2.Atom):
         return value(literal.literal)
     else:

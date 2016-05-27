@@ -13,4 +13,5 @@
 # limitations under the License.
 {
   x = Person<id: 7 name: "Bar" email: "bar@foo.com">;
+  print_(x=x);
 }

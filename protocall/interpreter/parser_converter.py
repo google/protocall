@@ -177,7 +177,8 @@ def convert_expression(expression):
   elif isinstance(expression, Boolean):
     e.atom.literal.boolean.value = expression.value
   elif isinstance(expression, Proto):
-    e.atom.literal.proto.value = expression.proto
+    e.atom.literal.proto.identifier.name = expression.identifier.identifier
+    e.atom.literal.proto.value = str(expression.proto)
   elif isinstance(expression, Identifier):
     e.atom.identifier.name = expression.identifier
   elif isinstance(expression, Array):
