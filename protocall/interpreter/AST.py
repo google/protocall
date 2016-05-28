@@ -26,21 +26,34 @@ class Identifier:
   def __repr__(self):
     return self.identifier
 
+class Field:
+  def __init__(self, components):
+    self.components = components
+
+  def __getitem__(self, item):
+    if item == 0:
+      return self.components
+    else:
+      raise IndexError
+
+  def __repr__(self):
+    return ".".join([str(component) for component in self.components])
+
 class ArrayRef:
-  def __init__(self, identifier, index):
-    self.identifier = identifier
+  def __init__(self, field, index):
+    self.field = field
     self.index = index
 
   def __getitem__(self, item):
     if item == 0:
-      return self.identifier
+      return self.field
     if item == 0:
       return self.index
     else:
       raise IndexError
 
   def __repr__(self):
-    return self.identifier.identifier + "[" + str(self.index) + "]"
+    return self.field.field + "[" + str(self.index) + "]"
 
 class Integer:
   def __init__(self, value):
@@ -82,20 +95,20 @@ class Boolean:
     return str(self.value)
 
 class Proto:
-  def __init__(self, identifier, proto):
-    self.identifier = identifier
+  def __init__(self, field, proto):
+    self.field = field
     self.proto = proto
 
   def __getitem__(self, item):
     if item == 0:
-      return self.identifier
+      return self.field
     elif item == 1:
       return self.proto
     else:
       raise IndexError
 
   def __repr__(self):
-    return "%s<%s>" % (self.identifier, str(self.proto))
+    return "%s<%s>" % (self.field, str(self.proto))
 
 class Array:
   def __init__(self, elements):
@@ -176,20 +189,20 @@ class Expression:
 
 
 class Assignment:
-  def __init__(self, identifier, expression):
-    self.identifier = identifier
+  def __init__(self, field, expression):
+    self.field = field
     self.expression = expression
 
   def __getitem__(self, item):
     if item == 0:
-      return self.identifier
+      return self.field
     elif item == 1:
       return self.expression
     else:
       raise IndexError
 
   def __repr__(self):
-    return "%s = %s" % (self.identifier, repr(self.expression))
+    return "%s = %s" % (self.field, repr(self.expression))
 
 class ArrayAssignment:
   def __init__(self, array_ref, expression):
@@ -225,20 +238,20 @@ class Argument:
     return "%s = %s" % (self.identifier, repr(self.expression))
 
 class Call:
-  def __init__(self, identifier, args):
-    self.identifier = identifier
+  def __init__(self, field, args):
+    self.field = field
     self.args = [Argument(arg[0], arg[1]) for arg in args]
 
   def __getitem__(self, item):
     if item == 0:
-      return self.identifier
+      return self.field
     elif item == 1:
       return self.args
     else:
       raise IndexError
 
   def __repr__(self):
-    return "%s(%s)" % (self.identifier, ",".join([repr(arg) for arg in self.args]))
+    return "%s(%s)" % (self.field, ",".join([repr(arg) for arg in self.args]))
 
 
 class Return:
@@ -255,20 +268,20 @@ class Return:
     return "return %s" % repr(self.expression)
 
 class Define:
-  def __init__(self, identifier, scope):
-    self.identifier = identifier
+  def __init__(self, field, scope):
+    self.field = field
     self.scope = scope
 
   def __getitem__(self, item):
     if item == 0:
-      return self.identifier
+      return self.field
     elif item == 1:
       return self.scope
     else:
       raise IndexError
 
   def __repr__(self):
-    return "define %s %s" % (self.identifier, self.scope)
+    return "define %s %s" % (self.field, self.scope)
 
 
 class IfScope:

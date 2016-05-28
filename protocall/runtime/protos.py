@@ -11,31 +11,17 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+from protocall.proto import protocall_pb2
+from protocall.proto import test_pb2
+from google.protobuf import text_format
 
-py_test(
-    name = "runtime_test",
-    srcs = ["runtime_test.py"],
-    deps = [
-        ":protocall",
-    ],
-)
+protos = {
+  'Person': test_pb2.Person,
+}
 
-py_library(
-    name = "protocall",
-    srcs = [
-        "builtins.py",
-        "dump.py",
-        "operators.py",
-        "protos.py",
-        "subrs.py",
-        "symbols.py",
-        "truth.py",
-        "value.py",
-        "vm.py",
-    ],
-    visibility = ["//visibility:public"],
-    deps = [
-        "//protocall/proto:protocall_proto_pb2",
-        "//protocall/proto:test_proto_pb2",
-    ],
-)
+def parse_proto(text, message_name):
+  if message_name in protos:
+    p = protos[message_name]()
+    text_format.Merge(text, p)
+    return p
+  raise RuntimeError, message_name

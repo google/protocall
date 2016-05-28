@@ -35,7 +35,7 @@ message Array {
 }
 
 message Proto {
-  required Identifier identifier = 1;
+  required Field field = 1;
   required string value = 2;
 }
 
@@ -53,15 +53,19 @@ message Identifier {
   required string name = 1;
 }
 
+message Field {
+  repeated Identifier component = 1;
+}
+
 message ArrayRef {
-  required Identifier identifier = 1;
+  required Field field = 1;
   required Integer index = 2;
 }
 
 message Atom {
   oneof atom {
     Literal literal = 1;
-    Identifier identifier = 2;
+    Field field = 2;
     Expression expression = 3;
     ArrayRef array_ref = 4;
   }
@@ -102,7 +106,7 @@ message Expression {
 }
 
 message Assignment {
-  required Identifier identifier = 1;
+  required Field field = 1;
   required Expression expression = 2;
 }
 
@@ -128,7 +132,7 @@ message Argument {
 }
 
 message Call {
-  required Identifier identifier = 1;
+  required Field field = 1;
   repeated Argument argument = 2;
 }
 
@@ -141,7 +145,7 @@ message While {
 }
 
 message Define {
-  required Identifier identifier = 1;
+  required Field field = 1;
   required Scope scope = 2;
 }
 

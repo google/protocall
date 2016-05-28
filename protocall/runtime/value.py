@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from protocall.proto import protocall_pb2
-
+from google.protobuf import message
 def value(literal):
     if isinstance(literal, protocall_pb2.Expression) and literal.HasField("atom"):
         return value(literal.atom.literal)
@@ -32,6 +32,16 @@ def value(literal):
         return str(literal.proto.value)
     elif isinstance(literal, protocall_pb2.Atom):
         return value(literal.literal)
+    elif isinstance(literal, int):
+        return literal
+    elif isinstance(literal, str):
+        return literal
+    elif isinstance(literal, unicode):
+        return literal
+    elif isinstance(literal, float):
+        return literal
+    elif isinstance(literal, message.Message):
+        return str(literal)
     else:
         print literal.__class__
         import pdb; pdb.set_trace()

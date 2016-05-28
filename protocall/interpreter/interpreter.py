@@ -39,10 +39,10 @@ if len(sys.argv) == 1:
         print e
       else:
         bl = parser_converter.convert_block(result[0])
-        try:
-          print pr.execute(bl)
-        except Exception as e:
-          print e
+        # try:
+        print pr.execute(bl)
+        # except Exception as e:
+        #   print e
     except EOFError:
       break
 else:

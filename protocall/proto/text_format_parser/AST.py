@@ -39,6 +39,19 @@ class Integer:
   def __repr__(self):
     return str(self.value)
 
+class String:
+  def __init__(self, value):
+    self.value = value
+
+  def __getitem__(self, item):
+    if item == 0:
+      return self.value
+    else:
+      raise IndexError
+
+  def __repr__(self):
+    return self.value
+
 class Data:
   def __init__(self, value):
     self.value = value
@@ -66,7 +79,7 @@ class TopLevelDefinition:
       raise IndexError
 
   def __repr__(self):
-    return str("%s: %s" % (self.identifier, self.data))
+    return "%s: %s" % (self.identifier, self.data)
 
 class Nested:
   def __init__(self, identifier, parser):
@@ -82,9 +95,9 @@ class Nested:
       raise IndexError
 
   def __repr__(self):
-    return "%s {\n%s\n}" % (self.identifier, self.parser)
+    return "%s { %s }" % (self.identifier, self.parser)
 
-class Parser:
+class ProtoParser:
   def __init__(self, values):
     self.values = values
 
@@ -95,4 +108,4 @@ class Parser:
       raise IndexError
 
   def __repr__(self):
-    return "\n".join(["%s" % value for value in self.values])
+    return " ".join(["%s" % value for value in self.values])

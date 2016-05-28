@@ -11,12 +11,15 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+import copy
 from pyparsing import nestedExpr, Forward, Word, alphas, nums, oneOf, Literal, operatorPrecedence, opAssoc, infixNotation, Suppress, delimitedList, And, Group, OneOrMore, Optional, Or, ZeroOrMore, ParseResults, Keyword, dblQuotedString, cStyleComment, pythonStyleComment
-from AST import Identifier, ArrayRef, Integer, String, Boolean, Proto, Array, SignOperator, ArithmeticOperator, ComparisonOperator, Expression, Assignment, ArrayAssignment, Call, Return, Define, IfScope, ElifScope, ElifScopes, ElseScope, Conditional, While, Statement, Block, Scope
+from AST import Identifier, Field, ArrayRef, Integer, String, Boolean, Proto, Array, SignOperator, ArithmeticOperator, ComparisonOperator, Expression, Assignment, ArrayAssignment, Call, Return, Define, IfScope, ElifScope, ElifScopes, ElseScope, Conditional, While, Statement, Block, Scope
 from protocall.proto.text_format_parser import text_format_parser
 
 def identifier_fn(s,l,t):
   return Identifier(t[0])
+def field_fn(s,l,t):
+  return Field(t)
 def array_ref_fn(s,l,t):
   return ArrayRef(t[0], int(t[1]))
 def integer_fn(s,l,t):
@@ -38,7 +41,7 @@ def comparison_operator_fn(s,l,t):
 def expression_fn(s,l,t):
   return Expression(t[0])
 def assignment_fn(s,l,t):
-  return Assignment(*t[0])
+  return Assignment(*t)
 def array_assignment_fn(s,l,t):
   return ArrayAssignment(t[0], t[1])
 def call_fn(s,l,t):
@@ -80,20 +83,22 @@ any_keyword = if_ | elif_ | else_ | return_ | define | while_ | true | false
 identifier = Word(alphas+'_')
 identifier.setParseAction(identifier_fn)
 identifier.ignore(any_keyword)
-array_ref = identifier + Suppress('[') + Word(nums) + Suppress(']')
+field = delimitedList(identifier, '.')
+field.setParseAction(field_fn)
+array_ref = field + Suppress('[') + Word(nums) + Suppress(']')
 array_ref.setParseAction(array_ref_fn)
 integer = Word(nums)
 integer.setParseAction(integer_fn)
-string = dblQuotedString
+string = copy.copy(dblQuotedString)
 string.setParseAction(string_fn)
 boolean = (true | false)
 boolean.setParseAction(boolean_fn)
-proto = identifier + Suppress('<') + text_format_parser.parser + Suppress('>')
+proto = field + Suppress('<') + text_format_parser.parser + Suppress('>')
 proto.setParseAction(proto_fn)
 
 call = Forward()
 literal = (integer | string | boolean | proto)
-operand = (literal | call | array_ref | identifier)
+operand = (literal | call | array_ref | field)
 
 
 multop = Word('*')
@@ -122,19 +127,19 @@ expression.setParseAction(expression_fn)
 array << Suppress('{') + Group(delimitedList(expression)) + Suppress('}')
 array.setParseAction(array_fn)
 
-assignment = Group(identifier + Suppress('=') + expression)
+assignment = field + Suppress('=') + expression
 assignment.setParseAction(assignment_fn)
 array_assignment = array_ref + Suppress('=') + expression
 array_assignment.setParseAction(array_assignment_fn)
 args = Group(Optional(delimitedList(Group(identifier + Suppress(Literal('=')) + expression))))
-call << (identifier + Suppress(Literal('(')) + args + Suppress(Literal(')')))
+call << (field + Suppress(Literal('(')) + args + Suppress(Literal(')')))
 call.setParseAction(call_fn)
 return_expression = (Suppress(return_) + expression)
 return_expression.setParseAction(return_fn)
 
 scope = Forward()
 
-define_function_scope = (Suppress(define) + identifier + scope)
+define_function_scope = (Suppress(define) + field + scope)
 define_function_scope.setParseAction(define_fn)
 if_expression = (Suppress(if_) + Suppress(Literal('(')) + expression + Suppress(Literal(')')))
 if_scope = (if_expression + scope)

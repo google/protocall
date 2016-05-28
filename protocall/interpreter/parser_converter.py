@@ -16,15 +16,22 @@ from pyparsing import ParseResults
 from protocall.proto import protocall_pb2
 
 from grammar import expression, statement, assignment, call, return_, block, scope, define, while_expression, while_scope, if_expression, if_scope, elif_expression, elif_scope, elif_scopes, else_scope, conditional
-from AST import Call, Assignment, ArrayAssignment, Integer, String, Boolean, Proto, Array, Identifier, ArrayRef, While, ArithmeticOperator, ComparisonOperator, Conditional, Return, Define
+from AST import Call, Assignment, ArrayAssignment, Integer, String, Boolean, Proto, Array, Identifier, Field, ArrayRef, While, ArithmeticOperator, ComparisonOperator, Conditional, Return, Define
+
+def convert_field(field):
+  f = protocall_pb2.Field()
+  for component in field.components:
+    c = f.component.add()
+    c.name = component.identifier
+  return f
 
 def convert_statement(statement):
     s = protocall_pb2.Statement()
     if isinstance(statement.statement, Call):
       call = statement.statement
-      identifier, args = call.identifier, call.args
+      field, args = call.field, call.args
       c = protocall_pb2.Call()
-      c.identifier.name = identifier.identifier
+      c.field.CopyFrom(convert_field(field))
       for arg in args:
         a = c.argument.add()
         a.identifier.name = arg.identifier.identifier
@@ -32,16 +39,16 @@ def convert_statement(statement):
       s.call.CopyFrom(c)
     elif isinstance(statement.statement, Assignment):
       assignment = statement.statement
-      identifier, expression = assignment.identifier, assignment.expression
+      field, expression = assignment.field, assignment.expression
       a = protocall_pb2.Assignment()
-      a.identifier.name = identifier.identifier
+      a.field.CopyFrom(convert_field(field))
       a.expression.CopyFrom(convert_expression(expression.expression))
       s.assignment.CopyFrom(a)
     elif isinstance(statement.statement, ArrayAssignment):
       array_assignment = statement.statement
       array_ref, expression = array_assignment.array_ref, array_assignment.expression
       a = protocall_pb2.ArrayAssignment()
-      a.array_ref.identifier.name = array_ref.identifier.identifier
+      a.array_ref.field.CopyFrom(convert_field(array_ref.field))
       a.array_ref.index.value = array_ref.index
       a.expression.CopyFrom(convert_expression(expression.expression))
       s.array_assignment.CopyFrom(a)
@@ -75,10 +82,10 @@ def convert_statement(statement):
       s.return_.CopyFrom(r)
     elif isinstance(statement.statement, Define):
       define = statement.statement
-      identifier = define.identifier
+      field = define.field
       scope = define.scope
       d = protocall_pb2.Define()
-      d.identifier.name = identifier.identifier
+      d.field.CopyFrom(convert_field(field))
       d.scope.CopyFrom(convert_scope(scope.scope))
       s.define.CopyFrom(d)
     else:
@@ -177,24 +184,24 @@ def convert_expression(expression):
   elif isinstance(expression, Boolean):
     e.atom.literal.boolean.value = expression.value
   elif isinstance(expression, Proto):
-    e.atom.literal.proto.identifier.name = expression.identifier.identifier
+    e.atom.literal.proto.field.CopyFrom(convert_expression(expression.field).atom.field)
     e.atom.literal.proto.value = str(expression.proto)
-  elif isinstance(expression, Identifier):
-    e.atom.identifier.name = expression.identifier
+  elif isinstance(expression, Field):
+    e.atom.field.CopyFrom(convert_field(expression))
   elif isinstance(expression, Array):
     array = e.atom.literal.array
     for item in expression.elements:
       element = array.element.add()
       element.CopyFrom(convert_expression(item.expression))
   elif isinstance(expression, ArrayRef):
-    e.atom.array_ref.identifier.name = expression.identifier.identifier
+    e.atom.array_ref.field.CopyFrom(convert_field(expression.field))
     e.atom.array_ref.index.value = expression.index
   elif isinstance(expression, ArithmeticOperator):
     convert_arithmetic_operator(expression, e)
   elif isinstance(expression, ComparisonOperator):
     convert_comparison_operator(expression, e)
   elif isinstance(expression, Call):
-    e.call.identifier.name = expression.identifier.identifier
+    e.call.field.CopyFrom(convert_field(expression.field))
     for arg in expression.args:
       a = e.call.argument.add()
       a.CopyFrom(convert_argument(arg))

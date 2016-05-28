@@ -11,31 +11,18 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-py_test(
-    name = "runtime_test",
-    srcs = ["runtime_test.py"],
-    deps = [
-        ":protocall",
-    ],
-)
-
-py_library(
-    name = "protocall",
-    srcs = [
-        "builtins.py",
-        "dump.py",
-        "operators.py",
-        "protos.py",
-        "subrs.py",
-        "symbols.py",
-        "truth.py",
-        "value.py",
-        "vm.py",
-    ],
-    visibility = ["//visibility:public"],
-    deps = [
-        "//protocall/proto:protocall_proto_pb2",
-        "//protocall/proto:test_proto_pb2",
-    ],
-)
+{
+  x = Person<id: 7 name: "Bar" email: "bar@foo.com">;
+  print_(x=x);
+  print_(id=x.id);
+  print_(name=x.name);
+  print_(person=x.person);
+  x.id = 6;
+  print_(id=x.id);
+  x.name = "Foo";
+  print_(name=x.name);
+  x.person = Person<id: 17 name: "Bar" email: "bar@foo.com">;
+  print_(s="person");
+  print_(person=x.person);
+  print_(x=x);
+}

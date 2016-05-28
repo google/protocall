@@ -72,6 +72,10 @@ class Protocall:
           elif isinstance(e_result, protocall_pb2.Atom):
             result = protocall_pb2.Expression()
             result.atom.CopyFrom(e_result)
+          elif isinstance(e_result, int):
+            result = e_result
+          elif isinstance(e_result, str):
+            result = e_result
           else:
             raise RuntimeError
           ## Should call return here
@@ -84,7 +88,9 @@ class Protocall:
               break
           result = None
         elif statement.HasField("define"):
-          self.udfs[statement.define.identifier.name] = statement.define.scope.block
+          ## Only support definition of top-level fields
+          identifier = statement.define.field.component[0].name
+          self.udfs[identifier] = statement.define.scope.block
           result = None
         else:
           raise RuntimeError(str(statement))
@@ -99,10 +105,10 @@ class Protocall:
       result = atom
     elif atom.HasField("expression"):
       result = self.evaluate(atom.expression)
-    elif atom.HasField("identifier"):
-      result = self.symbols.lookup_local(atom.identifier.name)
+    elif atom.HasField("field"):
+      result = self.symbols.lookup_local(atom.field)
     elif atom.HasField("array_ref"):
-      array = self.symbols.lookup_local(atom.array_ref.identifier.name).literal.array
+      array = self.symbols.lookup_local(atom.array_ref.field)
       result = self.evaluate(array.element[atom.array_ref.index.value])
     else:
       raise RuntimeError
@@ -139,39 +145,62 @@ class Protocall:
     return result
 
   def invoke(self, call):
-    if call.identifier.name in self.subrs:
-      function = self.subrs[call.identifier.name]
+    # For now, only support fields with a single component
+    assert (len(call.field.component) == 1)
+    name = call.field.component[0].name
+    if name in self.subrs:
+      function = self.subrs[name]
       result = function(self, call.argument, self.symbols)
-    elif call.identifier.name in self.builtins or call.identifier.name in self.udfs:
-      if call.identifier.name in self.builtins:
-        function = self.builtins[call.identifier.name]
-      elif call.identifier.name in self.udfs:
-        function = self.udfs[call.identifier.name]
+    elif name in self.builtins or name in self.udfs:
+      if name in self.builtins:
+        function = self.builtins[name]
+      elif name in self.udfs:
+        function = self.udfs[name]
       else:
         raise RuntimeError
       args = [ (arg.identifier.name, self.evaluate(arg.expression)) for arg in call.argument ]
       self.symbols.push_frame()
       for arg in args:
-        self.symbols.add_local_symbol(arg[0], arg[1])
+        f = protocall_pb2.Field()
+        f.component.add().name = arg[0]
+        self.symbols.add_local_symbol(f, arg[1])
       if type(function) == types.FunctionType:
         result = function(args, self.symbols)
       elif isinstance(function, protocall_pb2.Block):
         result = self.execute(function)
       self.symbols.pop_frame()
     else:
-      raise KeyError, call.identifier.name
+      raise KeyError, name
 
     return result
 
   def assignment(self, a):
     e = self.evaluate(a.assignment.expression)
-    self.symbols.add_local_symbol(a.assignment.identifier.name, e)
-    return e
+    if isinstance(e, protocall_pb2.Expression):
+      e = e.atom
+    if isinstance(e, protocall_pb2.Atom):
+      if e.HasField("literal"):
+        if e.literal.HasField("integer"):
+          v = e.literal.integer.value
+        elif e.literal.HasField("string"):
+          v = e.literal.string.value
+        elif e.literal.HasField("array"):
+          v = e.literal.array
+        elif e.literal.HasField("proto"):
+          v = e
+        else:
+          raise RuntimeError
+      else:
+        raise RuntimeError
+    else:
+      raise RuntimeError
+    self.symbols.add_local_symbol(a.assignment.field, v)
+    return v
 
   def array_assignment(self, a):
     e = self.evaluate(a.array_assignment.expression)
-    n = self.symbols.lookup(a.array_assignment.array_ref.identifier.name)
+    n = self.symbols.lookup(a.array_assignment.array_ref.field)
     x = a.array_assignment.array_ref.index.value
-    n.literal.array.element[a.array_assignment.array_ref.index.value].atom.CopyFrom(e)
-    self.symbols.add_local_symbol(a.assignment.identifier.name, e)
+    n.element[a.array_assignment.array_ref.index.value].atom.CopyFrom(e)
+    self.symbols.add_local_symbol(a.array_assignment.array_ref.field, e)
     return e
