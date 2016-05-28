@@ -15,6 +15,8 @@
 
 import unittest
 
+from google.protobuf import text_format
+
 from protocall.proto import protocall_pb2
 from protocall.runtime.vm import Protocall
 from protocall.runtime import dump
@@ -453,6 +455,34 @@ def test_program():
     print result
     return result
 
+def create_proto_expression():
+    s= """arithmetic_operator { left { atom { field { component { name: "a" } component { name: "value" } } } } right { arithmetic_operator { left { atom { field { component { name: "xyz" } component { name: "value" } } } } right { atom { field { component { name: "b" } component { name: "value" } } } } operator: PLUS } } operator: MULTIPLY }"""
+
+    e = protocall_pb2.Expression()
+    text_format.Merge(s, e)
+    return e
+
+
+def test_evaluate_proto_expression():
+    expression = create_proto_expression()
+    a = protocall_pb2.Atom()
+    p = a.literal.proto
+    p.field.component.add().name = "Integer"
+    p.value = "value: 9"
+    b = protocall_pb2.Atom()
+    p = b.literal.proto
+    p.field.component.add().name = "Integer"
+    p.value = "value: 5"
+    xyz = protocall_pb2.Atom()
+    p = xyz.literal.proto
+    p.field.component.add().name = "Integer"
+    p.value = "value: 5"
+    symbols = Symbols({'a': a,
+                       'b': b,
+                       'xyz': xyz})
+    pr = Protocall(symbols)
+    result = pr.evaluate(expression)
+    return result
 
 class RuntimeTest(unittest.TestCase):
 
@@ -494,6 +524,9 @@ class RuntimeTest(unittest.TestCase):
 
   def testProgram(self):
     assert test_program().atom.literal.integer.value == 0
+
+  def testEvaluateProtoExpression(self):
+    assert test_evaluate_proto_expression().literal.integer.value == 90
 
 
 if __name__ == '__main__':

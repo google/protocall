@@ -32,6 +32,10 @@ def dump_expression(expression):
                     s = 'true'
             elif literal.HasField("array"):
                 s = "'%s'" % literal.array.element
+            elif literal.HasField("proto"):
+                p = literal.proto
+                s = "%s<%s>" % (".".join([component.name for component in p.field.component]),
+                                (p.value))
             else:
                 raise RuntimeError
         elif atom.HasField("field"):

@@ -11,19 +11,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from protocall.proto import protocall_pb2
-from protocall.proto import test_pb2
-from google.protobuf import text_format
-
-protos = {
-  'Person': test_pb2.Person,
-  'Integer': test_pb2.Integer,
-  'String': test_pb2.String,
+{
+  x = Integer<value: 5>;
+  y = Integer<value: 7>;
+  z = Integer<>;
+  z.value = x.value * y.value;
 }
-
-def parse_proto(text, message_name):
-  if message_name in protos:
-    p = protos[message_name]()
-    text_format.Merge(text, p)
-    return p
-  raise RuntimeError, message_name

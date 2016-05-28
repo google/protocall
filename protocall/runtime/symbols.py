@@ -61,7 +61,6 @@ class Symbols:
           self.stack[-1][field.component[0].name] = value
         else:
           components = list(reversed([component.name for component in field.component]))
-          print "components=", components
           atom = self.lookup_local_key(components.pop())
           parent, base, p = self.traverse_atom(atom, components)
           if isinstance(p, Message):

@@ -11,19 +11,31 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from protocall.proto import protocall_pb2
-from protocall.proto import test_pb2
-from google.protobuf import text_format
+{
+  x = Integer<value: 0>;
+  print_(x=x);
+  x.value = x.value + 1;
+  print_(x=x);
 
-protos = {
-  'Person': test_pb2.Person,
-  'Integer': test_pb2.Integer,
-  'String': test_pb2.String,
+  x = Integer<value: 5>;
+  print_(value=x.value);
+  while (x.value > 0) {
+    print_(value=x.value);
+    x.value = x.value - 1;
+  };
+  print_(value=x.value);
+  if (x.value>5) {
+    s = String<value: "0">;
+    print_(s=s);
+  }
+  elif (x<0) {
+    s = String<value: "1">;
+    print_(s=s);
+  }
+  else {
+    s = String<value: "2">;
+    print_(s=s);
+  };
+  return x;
+
 }
-
-def parse_proto(text, message_name):
-  if message_name in protos:
-    p = protos[message_name]()
-    text_format.Merge(text, p)
-    return p
-  raise RuntimeError, message_name

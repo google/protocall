@@ -15,6 +15,14 @@ syntax = "proto2";
 
 package protocall.proto.parser;
 
+message Integer {
+  required uint32 value = 1;
+}
+
+message String {
+  required string value = 1;
+}
+
 message Person {
   required uint32 id = 1;
   required string name = 2;
