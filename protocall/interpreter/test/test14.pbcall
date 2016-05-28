@@ -14,15 +14,10 @@
 {
   x = Person<id: 7 name: "Bar" email: "bar@foo.com">;
   print_(x=x);
-  print_(id=x.id);
-  print_(name=x.name);
-  print_(person=x.person);
   x.id = 6;
-  print_(id=x.id);
+  print_(x=x);
   x.name = "Foo";
-  print_(name=x.name);
+  print_(x=x);
   x.person = Person<id: 17 name: "Bar" email: "bar@foo.com">;
-  print_(s="person");
-  print_(person=x.person);
   print_(x=x);
 }

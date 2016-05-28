@@ -41,17 +41,18 @@ class Symbols:
     def add_global_symbol(self, key, value):
         self.stack[0][key] = value
 
-    def traverse_atom(self, atom):
+    def traverse_atom(self, atom, components):
         value = atom.literal.proto.value
         field = ".".join([component.name for component in atom.literal.proto.field.component])
         base = parse_proto(value, field)
         p = base
         parent = None
-        for component in atom.literal.proto.field.component:
-            if hasattr(p, component.name):
+        for component in components:
+            if hasattr(p, component):
                 parent = p
-                p = getattr(p, component.name)
+                p = getattr(p, component)
             else:
+                import pdb; pdb.set_trace()
                 raise RuntimeError("did not find component %s in proto %s" % (component, p))
         return parent, base, p
 
@@ -61,11 +62,8 @@ class Symbols:
         else:
           components = list(reversed([component.name for component in field.component]))
           print "components=", components
-          try:
-            atom = self.lookup_local_key(components.pop())
-            parent, base, p = self.traverse_atom(atom)
-          except:
-            import pdb; pdb.set_trace()
+          atom = self.lookup_local_key(components.pop())
+          parent, base, p = self.traverse_atom(atom, components)
           if isinstance(p, Message):
             result = parse_proto(value.literal.proto.value, value.literal.proto.field.component[0].name)
             getattr(parent, field.component[-1].name).CopyFrom(result)
@@ -81,7 +79,7 @@ class Symbols:
         else:
           components = list(reversed([component.name for component in field.component]))
           atom = self.lookup_key(components.pop())
-          parent, base, p = self.traverse_atom(atom)
+          parent, base, p = self.traverse_atom(atom, components)
 
         return p
 
@@ -98,7 +96,7 @@ class Symbols:
           return self.lookup_local_key(key)
         components = list(reversed([component.name for component in field.component]))
         atom = self.lookup_local_key(components.pop())
-        parent, base, p = self.traverse_atom(atom)
+        parent, base, p = self.traverse_atom(atom, components)
         return p
 
     def lookup_local_key(self, key):
