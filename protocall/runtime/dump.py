@@ -13,6 +13,9 @@
 # limitations under the License.
 from protocall.proto import protocall_pb2
 
+def field_to_string(field):
+    return ".".join([component.name for component in field.component])
+
 def dump_expression(expression):
     if expression.HasField("atom"):
         atom = expression.atom
@@ -31,10 +34,8 @@ def dump_expression(expression):
                 s = "'%s'" % literal.array.element
             else:
                 raise RuntimeError
-        elif atom.HasField("identifier"):
-            identifier = atom.identifier
-            name = identifier.name
-            s = name
+        elif atom.HasField("field"):
+            s = field_to_string(atom.field)
         elif atom.HasField("expression"):
             expression2 = atom.expression
             s = dump_expression(expression2)
@@ -72,7 +73,7 @@ def dump_expression(expression):
         s = "(%s %s %s)" % (left, ostr, right)
     elif expression.HasField("call"):
         call = expression.call
-        name = call.identifier.name
+        name = field_to_string(call.field)
         arguments = call.argument
         args = [ "%s=%s" % (arg.identifier.name, dump_expression(arg.expression)) for arg in arguments ]
         s = "%s(%s)" % (name, ",".join(args))
@@ -88,12 +89,12 @@ def dump(block, level=0):
     for statement in block.statement:
         if statement.HasField("assignment"):
             assignment = statement.assignment
-            name = assignment.identifier.name
+            name = field_to_string(assignment.field)
             expression = dump_expression(assignment.expression)
             s = indent("%s = %s;" %  (name, expression), level+1)
         elif statement.HasField("call"):
             call = statement.call
-            name = call.identifier.name
+            name = field_to_string(call.field)
             arguments = call.argument
             args = [ "%s=%s" % (arg.identifier.name, dump_expression(arg.expression)) for arg in arguments ]
             s = indent("%s(%s);" % (name, ",".join(args)), level+1)
@@ -118,9 +119,8 @@ def dump(block, level=0):
             s = indent("while %s%s;" % (dump_expression(expression_scope.expression), dump(expression_scope.scope.block, level+1)), level+1)
         elif statement.HasField("define"):
             define = statement.define
-            identifier = define.identifier
             block = define.scope.block
-            s = indent("define %s%s;" % (identifier.name, dump(block, level+1)), level+1)
+            s = indent("define %s%s;" % (field_to_string(define.field), dump(block, level+1)), level+1)
         else:
             raise RuntimeError
         result.append(s)

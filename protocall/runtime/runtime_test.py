@@ -29,7 +29,7 @@ def create_expression():
     e.arithmetic_operator.left.atom.literal.integer.value = 9
     e2 = e.arithmetic_operator.right
     e2.arithmetic_operator.operator = protocall_pb2.ArithmeticOperator.Op.Value("PLUS")
-    e2.arithmetic_operator.left.atom.identifier.name = 'xyz'
+    e2.arithmetic_operator.left.atom.field.component.add().name = 'xyz'
     e2.arithmetic_operator.right.atom.literal.integer.value = 5
     return e
 
@@ -52,7 +52,7 @@ def test_evaluate_array():
     array = a.literal.array
     element = array.element.add()
     op = element.arithmetic_operator
-    op.left.atom.identifier.name = "x"
+    op.left.atom.field.component.add().name = "x"
     op.right.atom.literal.integer.value = 5
     op.operator = protocall_pb2.ArithmeticOperator.Op.Value("PLUS")
     atom = protocall_pb2.Atom()
@@ -71,7 +71,7 @@ def create_block():
     p = protocall_pb2.Block()
 
     s = p.statement.add()
-    s.assignment.identifier.name = 'x'
+    s.assignment.field.component.add().name = 'x'
     e = s.assignment.expression
     e.arithmetic_operator.left.atom.literal.integer.value = 7
     e.arithmetic_operator.right.atom.literal.integer.value = 5
@@ -80,7 +80,7 @@ def create_block():
     s2 = p.statement.add()
     e = s2.return_.expression
     e2 = e.arithmetic_operator.left
-    e2.arithmetic_operator.left.atom.identifier.name = 'x'
+    e2.arithmetic_operator.left.atom.field.component.add().name = 'x'
     e2.arithmetic_operator.right.atom.literal.integer.value = 3
     e2.arithmetic_operator.operator = protocall_pb2.ArithmeticOperator.Op.Value("PLUS")
     e.arithmetic_operator.right.atom.literal.integer.value = 9
@@ -161,7 +161,7 @@ def create_call():
 
     s = p.statement.add()
 
-    s.call.identifier.name = "print_"
+    s.call.field.component.add().name = "print_"
     arg = s.call.argument.add()
     arg.identifier.name = 'x'
     arg.expression.atom.literal.integer.value = 5
@@ -175,29 +175,29 @@ def create_call():
     arg.expression.atom.literal.integer.value = 7
 
     s = p.statement.add()
-    s.call.identifier.name = "print_"
+    s.call.field.component.add().name = "print_"
 
     s = p.statement.add()
-    s.assignment.identifier.name = 'x'
+    s.assignment.field.component.add().name = 'x'
     e = s.assignment.expression
     e.atom.literal.integer.value = 7
 
     s = p.statement.add()
-    s.call.identifier.name = "print_"
+    s.call.field.component.add().name = "print_"
     arg = s.call.argument.add()
     arg.identifier.name = 'x'
     e = arg.expression.atom.expression
-    e.atom.identifier.name = 'x'
+    e.atom.field.component.add().name = 'x'
 
     s = p.statement.add()
-    s.call.identifier.name = "print_"
+    s.call.field.component.add().name = "print_"
 
     s = p.statement.add()
-    s.call.identifier.name = "print_"
+    s.call.field.component.add().name = "print_"
     arg = s.call.argument.add()
     arg.identifier.name = 'x'
     e = arg.expression.atom.expression
-    e.arithmetic_operator.left.atom.identifier.name = 'x'
+    e.arithmetic_operator.left.atom.field.component.add().name = 'x'
     e.arithmetic_operator.right.atom.literal.integer.value = 3
     e.arithmetic_operator.operator = protocall_pb2.ArithmeticOperator.Op.Value("PLUS")
 
@@ -218,7 +218,7 @@ def create_call2():
 
     s = p.statement.add()
     c = s.return_.expression.call
-    c.identifier.name = "double"
+    c.field.component.add().name = "double"
     arg = c.argument.add()
     arg.identifier.name = 'x'
     arg.expression.atom.literal.integer.value = 3
@@ -239,15 +239,15 @@ def create_call3():
     p = protocall_pb2.Block()
 
     s = p.statement.add()
-    s.assignment.identifier.name = 'x'
+    s.assignment.field.component.add().name = 'x'
     e = s.assignment.expression
-    e.call.identifier.name = "double"
+    e.call.field.component.add().name = "double"
     arg = e.call.argument.add()
     arg.identifier.name = 'x'
     arg.expression.atom.literal.integer.value = 3
 
     s = p.statement.add()
-    s.return_.expression.atom.identifier.name = 'x'
+    s.return_.expression.atom.field.component.add().name = 'x'
 
     return p
 
@@ -268,12 +268,12 @@ def create_while():
     p = protocall_pb2.Block()
 
     s = p.statement.add()
-    s.assignment.identifier.name = 'x'
+    s.assignment.field.component.add().name = 'x'
     e = s.assignment.expression
     e.atom.literal.integer.value = 5
 
     s = p.statement.add()
-    s.call.identifier.name = "print_"
+    s.call.field.component.add().name = "print_"
     arg = s.call.argument.add()
     arg.identifier.name = 's'
     arg.expression.atom.literal.string.value = 'Start'
@@ -281,26 +281,26 @@ def create_while():
     s = p.statement.add()
     es = s.while_.expression_scope
     e = es.expression
-    e.comparison_operator.left.atom.identifier.name = 'x'
+    e.comparison_operator.left.atom.field.component.add().name = 'x'
     e.comparison_operator.right.atom.literal.integer.value = 0
     e.comparison_operator.operator = protocall_pb2.ComparisonOperator.Op.Value("GREATER_THAN")
 
     # Inside while loop
     s = es.scope.block.statement.add()
-    s.call.identifier.name = "print_"
+    s.call.field.component.add().name = "print_"
     arg = s.call.argument.add()
     arg.identifier.name = 'x'
-    arg.expression.atom.identifier.name = 'x'
+    arg.expression.atom.field.component.add().name = 'x'
 
     s = es.scope.block.statement.add()
-    s.assignment.identifier.name = 'x'
+    s.assignment.field.component.add().name = 'x'
     e = s.assignment.expression
-    e.arithmetic_operator.left.atom.identifier.name = 'x'
+    e.arithmetic_operator.left.atom.field.component.add().name = 'x'
     e.arithmetic_operator.right.atom.literal.integer.value = 1
     e.arithmetic_operator.operator = protocall_pb2.ArithmeticOperator.Op.Value("MINUS")
 
     s = p.statement.add()
-    s.call.identifier.name = "print_"
+    s.call.field.component.add().name = "print_"
     arg = s.call.argument.add()
     arg.identifier.name = 's'
     arg.expression.atom.literal.string.value = 'Done'
@@ -321,18 +321,18 @@ def create_define():
     p = protocall_pb2.Block()
 
     s = p.statement.add()
-    s.define.identifier.name = "double_udf"
+    s.define.field.component.add().name = "double_udf"
     b = s.define.scope.block
 
     # Inside function
     s = b.statement.add()
     e = s.return_.expression
-    e.arithmetic_operator.left.atom.identifier.name = 'x'
+    e.arithmetic_operator.left.atom.field.component.add().name = 'x'
     e.arithmetic_operator.right.atom.literal.integer.value = 2
     e.arithmetic_operator.operator = protocall_pb2.ArithmeticOperator.Op.Value("MULTIPLY")
 
     s = p.statement.add()
-    s.call.identifier.name = "double_udf"
+    s.call.field.component.add().name = "double_udf"
     arg = s.call.argument.add()
     arg.identifier.name = 'x'
     arg.expression.atom.literal.integer.value = 4
@@ -353,45 +353,33 @@ def create_setq():
     p = protocall_pb2.Block()
 
     s = p.statement.add()
-    s.call.identifier.name = 'setq'
+    s.call.field.component.add().name = 'setq'
     a = protocall_pb2.Atom()
     arg = s.call.argument.add()
     arg.identifier.name = 'arg0'
-    arg.expression.atom.identifier.name = 'x'
+    arg.expression.atom.field.component.add().name = 'x'
     arg = s.call.argument.add()
     arg.identifier.name = 'arg1'
     arg.expression.atom.literal.integer.value = 5
 
     s = p.statement.add()
-    s.call.identifier.name = "print_"
+    s.call.field.component.add().name = "print_"
     arg = s.call.argument.add()
     arg.identifier.name = 'x'
-    arg.expression.atom.identifier.name = 'x'
+    arg.expression.atom.field.component.add().name = 'x'
 
     return p
-
-def test_setq():
-    p = create_setq()
-    pr = Protocall()
-    print "Program:"
-    print dump.dump(p)
-    result = pr.execute(p)
-    assert 'x' in pr.symbols.globals()
-    print "Result:"
-    print result
-    return result
-
 
 def create_program():
     p = protocall_pb2.Block()
 
     s = p.statement.add()
-    s.assignment.identifier.name = 'x'
+    s.assignment.field.component.add().name = 'x'
     e = s.assignment.expression
     e.atom.literal.integer.value = 5
 
     s = p.statement.add()
-    s.call.identifier.name = "print_"
+    s.call.field.component.add().name = "print_"
     arg = s.call.argument.add()
     arg.identifier.name = 's'
     arg.expression.atom.literal.string.value = 'Start'
@@ -399,59 +387,59 @@ def create_program():
     s = p.statement.add()
     es = s.while_.expression_scope
     e = es.expression
-    e.comparison_operator.left.atom.identifier.name = 'x'
+    e.comparison_operator.left.atom.field.component.add().name = 'x'
     e.comparison_operator.right.atom.literal.integer.value = 0
     e.comparison_operator.operator = protocall_pb2.ComparisonOperator.Op.Value("GREATER_THAN")
 
     # Inside while loop
     s = es.scope.block.statement.add()
-    s.call.identifier.name = "print_"
+    s.call.field.component.add().name = "print_"
     arg = s.call.argument.add()
     arg.identifier.name = 'x'
-    arg.expression.atom.identifier.name = 'x'
+    arg.expression.atom.field.component.add().name = 'x'
 
     s = es.scope.block.statement.add()
     e = s.conditional.if_scope.expression
-    e.comparison_operator.left.atom.identifier.name = 'x'
+    e.comparison_operator.left.atom.field.component.add().name = 'x'
     e.comparison_operator.right.atom.literal.integer.value = 3
     e.comparison_operator.operator = protocall_pb2.ComparisonOperator.Op.Value("EQUALS")
     statement = s.conditional.if_scope.scope.block.statement.add()
-    statement.call.identifier.name = "print_"
+    statement.call.field.component.add().name = "print_"
     arg = statement.call.argument.add()
     arg.identifier.name = 's'
     arg.expression.atom.literal.string.value = 'fizz'
     elif_expression_scope = s.conditional.elif_scope.add()
     e = elif_expression_scope.expression
-    e.comparison_operator.left.atom.identifier.name = 'x'
+    e.comparison_operator.left.atom.field.component.add().name = 'x'
     e.comparison_operator.right.atom.literal.integer.value = 2
     e.comparison_operator.operator = protocall_pb2.ComparisonOperator.Op.Value("EQUALS")
     statement = elif_expression_scope.scope.block.statement.add()
-    statement.call.identifier.name = "print_"
+    statement.call.field.component.add().name = "print_"
     arg = statement.call.argument.add()
     arg.identifier.name = 's'
     arg.expression.atom.literal.string.value = 'fuzz'
     statement = s.conditional.else_scope.block.statement.add()
-    statement.call.identifier.name = "print_"
+    statement.call.field.component.add().name = "print_"
     arg = statement.call.argument.add()
     arg.identifier.name = 's'
     arg.expression.atom.literal.string.value = 'buzz'
 
     s = es.scope.block.statement.add()
-    s.assignment.identifier.name = 'x'
+    s.assignment.field.component.add().name = 'x'
     e = s.assignment.expression
-    e.arithmetic_operator.left.atom.identifier.name = 'x'
+    e.arithmetic_operator.left.atom.field.component.add().name = 'x'
     e.arithmetic_operator.right.atom.literal.integer.value = 1
     e.arithmetic_operator.operator = protocall_pb2.ArithmeticOperator.Op.Value("MINUS")
 
     s = p.statement.add()
-    s.call.identifier.name = "print_"
+    s.call.field.component.add().name = "print_"
     arg = s.call.argument.add()
     arg.identifier.name = 's'
     arg.expression.atom.literal.string.value = 'Done'
 
     s = p.statement.add()
     v = s.return_.expression
-    v.atom.identifier.name = 'x'
+    v.atom.field.component.add().name = 'x'
 
     return p
 
@@ -503,9 +491,6 @@ class RuntimeTest(unittest.TestCase):
 
   def testDefine(self):
     assert test_define().atom.literal.integer.value == 8
-
-  def testSetq(self):
-    test_setq()
 
   def testProgram(self):
     assert test_program().atom.literal.integer.value == 0

@@ -73,9 +73,11 @@ class Protocall:
             result = protocall_pb2.Expression()
             result.atom.CopyFrom(e_result)
           elif isinstance(e_result, int):
-            result = e_result
+            result = protocall_pb2.Expression()
+            result.atom.literal.integer.value = e_result
           elif isinstance(e_result, str):
-            result = e_result
+            result = protocall_pb2.Expression()
+            result.atom.literal.string.value = e_result
           else:
             raise RuntimeError
           ## Should call return here
