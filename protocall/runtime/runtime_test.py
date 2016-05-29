@@ -750,66 +750,66 @@ def test_proto_operator_code_test():
 
 class RuntimeTest(unittest.TestCase):
 
-  # def testEvaluate(self):
-  #   assert test_evaluate().literal.integer.value == 90
+  def testEvaluate(self):
+    assert test_evaluate().literal.integer.value == 90
 
-  # def testEvaluateArray(self):
-  #   assert test_evaluate_array().literal.array.element[0].atom.literal.integer.value == 10
+  def testEvaluateArray(self):
+    assert test_evaluate_array().literal.array.element[0].atom.literal.integer.value == 10
 
-  # def testExecute(self):
-  #   assert test_execute().atom.literal.integer.value == 135
+  def testExecute(self):
+    assert test_execute().atom.literal.integer.value == 135
 
-  # def testConditional(self):
-  #   assert test_conditional(literal_true, literal_false).atom.literal.integer.value == 10
-  #   assert test_conditional(literal_false, literal_true).atom.literal.integer.value == 20
-  #   assert test_conditional(literal_false, literal_false).atom.literal.integer.value == 30
+  def testConditional(self):
+    assert test_conditional(literal_true, literal_false).atom.literal.integer.value == 10
+    assert test_conditional(literal_false, literal_true).atom.literal.integer.value == 20
+    assert test_conditional(literal_false, literal_false).atom.literal.integer.value == 30
 
-  # def testConditionalExpression(self):
-  #   assert test_conditional_expression(1, 1, "LESS_THAN").atom.literal.integer.value == 20
-  #   assert test_conditional_expression(1, 1, "EQUALS").atom.literal.integer.value == 10
-  #   assert test_conditional_expression(1, 1, "GREATER_THAN").atom.literal.integer.value == 20
-  #   assert test_conditional_expression(1, 2, "LESS_THAN").atom.literal.integer.value == 10
-  #   assert test_conditional_expression(1, 2, "EQUALS").atom.literal.integer.value == 20
-  #   assert test_conditional_expression(1, 2, "GREATER_THAN").atom.literal.integer.value == 20
-  #   assert test_conditional_expression(2, 1, "LESS_THAN").atom.literal.integer.value == 20
-  #   assert test_conditional_expression(2, 1, "EQUALS").atom.literal.integer.value == 20
-  #   assert test_conditional_expression(2, 1, "GREATER_THAN").atom.literal.integer.value == 10
+  def testConditionalExpression(self):
+    assert test_conditional_expression(1, 1, "LESS_THAN").atom.literal.integer.value == 20
+    assert test_conditional_expression(1, 1, "EQUALS").atom.literal.integer.value == 10
+    assert test_conditional_expression(1, 1, "GREATER_THAN").atom.literal.integer.value == 20
+    assert test_conditional_expression(1, 2, "LESS_THAN").atom.literal.integer.value == 10
+    assert test_conditional_expression(1, 2, "EQUALS").atom.literal.integer.value == 20
+    assert test_conditional_expression(1, 2, "GREATER_THAN").atom.literal.integer.value == 20
+    assert test_conditional_expression(2, 1, "LESS_THAN").atom.literal.integer.value == 20
+    assert test_conditional_expression(2, 1, "EQUALS").atom.literal.integer.value == 20
+    assert test_conditional_expression(2, 1, "GREATER_THAN").atom.literal.integer.value == 10
 
-  # def testCall(self):
-  #   test_call()
-  #   assert test_call2().atom.literal.integer.value == 6
-  #   assert test_call3().atom.literal.integer.value == 6
+  def testCall(self):
+    test_call()
+    assert test_call2().atom.literal.integer.value == 6
+    assert test_call3().atom.literal.integer.value == 6
 
-  # def testWhile(self):
-  #   test_while()
+  def testWhile(self):
+    test_while()
 
-  # def testDefine(self):
-  #   assert test_define().atom.literal.integer.value == 8
+  def testDefine(self):
+    assert test_define().atom.literal.integer.value == 8
 
-  # def testProgram(self):
-  #   assert test_program().atom.literal.integer.value == 0
+  def testProgram(self):
+    assert test_program().atom.literal.integer.value == 0
 
-  # def testEvaluateProtoExpression(self):
-  #   assert test_evaluate_proto_expression().literal.integer.value == 90
+  def testEvaluateProtoExpression(self):
+    assert test_evaluate_proto_expression().literal.integer.value == 90
 
-  # def testBasicCodeTest(self):
-  #   assert test_basic_code_test().atom.literal.integer.value == 6
-  # def testWhileCodeTest(self):
-  #   assert test_while_code_test().atom.literal.integer.value == 0
-  # def testFunctionCodeTest(self):
-  #   assert test_function_code_test().atom.literal.integer.value == 0
-  # def testFibonacciCodeTest(self):
-  #   assert test_fibonacci_code_test().atom.literal.integer.value == 5
-  # def testFactorialCodeTest(self):
-  #   assert test_factorial_code_test().atom.literal.integer.value == 479001600
-  # def testDefineCodeTest(self):
-  #   assert test_define_code_test().atom.literal.integer.value == 0
-  # def testArrayCodeTest(self):
-  #   assert test_array_code_test().atom.literal.integer.value == 5
-  # def testArrayAppendCodeTest(self):
-  #   assert test_array_append_code_test().atom.literal.integer.value == 2
-  # def testProtoCodeTest(self):
-  #   assert test_proto_code_test().atom.literal.integer.value == 7
+  def testBasicCodeTest(self):
+    assert test_basic_code_test().atom.literal.integer.value == 6
+  def testWhileCodeTest(self):
+    assert test_while_code_test().atom.literal.integer.value == 0
+  def testFunctionCodeTest(self):
+    assert test_function_code_test().atom.literal.integer.value == 0
+  def testFibonacciCodeTest(self):
+    assert test_fibonacci_code_test().atom.literal.integer.value == 5
+  def testFactorialCodeTest(self):
+    assert test_factorial_code_test().atom.literal.integer.value == 479001600
+  def testDefineCodeTest(self):
+    assert test_define_code_test().atom.literal.integer.value == 0
+  def testArrayCodeTest(self):
+    assert test_array_code_test().atom.literal.integer.value == 5
+  def testArrayAppendCodeTest(self):
+    assert test_array_append_code_test().atom.literal.integer.value == 2
+  def testProtoCodeTest(self):
+    assert test_proto_code_test().atom.literal.integer.value == 7
   def testProtoAssignmentCodeTest(self):
     assert test_proto_assignment_code_test().atom.literal.integer.value == 0
   def testProtoOperatorCodeTest(self):
