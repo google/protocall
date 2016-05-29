@@ -57,6 +57,16 @@ py_test(
 )
 
 py_test(
+    name = "interpreter_test",
+    srcs = ["interpreter_test.py"],
+    deps = [
+        ":parser",
+        ":parser_converter",
+        "//protocall/runtime:protocall",
+    ],
+)
+
+py_test(
     name = "roundtrip_test",
     srcs = ["roundtrip_test.py"],
     deps = [
