@@ -72,6 +72,9 @@ class Protocall:
           elif isinstance(e_result, protocall_pb2.Atom):
             result = protocall_pb2.Expression()
             result.atom.CopyFrom(e_result)
+          elif isinstance(e_result, protocall_pb2.Array):
+            result = protocall_pb2.Expression()
+            result.atom.CopyFrom(e_result)
           elif isinstance(e_result, int):
             result = protocall_pb2.Expression()
             result.atom.literal.integer.value = e_result
@@ -79,6 +82,7 @@ class Protocall:
             result = protocall_pb2.Expression()
             result.atom.literal.string.value = e_result
           else:
+            print e_result.__class__
             raise RuntimeError
           ## Should call return here
         elif statement.HasField("while_"):
@@ -111,6 +115,8 @@ class Protocall:
       result = self.symbols.lookup_local(atom.field)
     elif atom.HasField("array_ref"):
       array = self.symbols.lookup_local(atom.array_ref.field)
+      print "array=", array
+      print atom.array_ref.index.value
       result = self.evaluate(array.element[atom.array_ref.index.value])
     else:
       raise RuntimeError

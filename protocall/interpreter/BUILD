@@ -38,6 +38,7 @@ py_binary(
     srcs = [
         "interpreter.py",
     ],
+    visibility = ["//visibility:public"],
     deps = [
         ":parser",
         ":parser_converter",

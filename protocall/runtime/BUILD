@@ -17,6 +17,7 @@ py_test(
     srcs = ["runtime_test.py"],
     deps = [
         ":protocall",
+        "//protocall/interpreter",
     ],
 )
 
