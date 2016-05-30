@@ -12,9 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import copy
-from pyparsing import nestedExpr, Forward, Word, alphas, nums, alphanums, oneOf, Literal, operatorPrecedence, opAssoc, infixNotation, Suppress, delimitedList, And, Group, OneOrMore, Optional, Or, ZeroOrMore, ParseResults, Keyword, dblQuotedString, cStyleComment, pythonStyleComment
-from AST import Identifier, Field, ArrayRef, Integer, String, Boolean, Proto, Array, SignOperator, ArithmeticOperator, ComparisonOperator, Expression, Assignment, ArrayAssignment, Call, Return, Define, IfScope, ElifScope, ElifScopes, ElseScope, Conditional, While, Statement, Block, Scope
-from protocall.proto.text_format_parser import text_format_parser
+from pyparsing import nestedExpr, Forward, Word, alphas, nums, alphanums, oneOf, Literal, operatorPrecedence, opAssoc, infixNotation, Suppress, delimitedList, And, Group, OneOrMore, Optional, Or, ZeroOrMore, ParseResults, Keyword, dblQuotedString, cStyleComment, pythonStyleComment, Regex
+#from pyparsing import Word, alphas, alphanums, Regex, Suppress, Forward, Group, oneOf, ZeroOrMore, Optional, delimitedList, Keyword, restOfLine, dblQuotedString
+
+from AST import Identifier, Field, ArrayRef, Integer, String, Boolean, Proto, Array, SignOperator, ArithmeticOperator, ComparisonOperator, Expression, Assignment, ArrayAssignment, Call, Return, Define, IfScope, ElifScope, ElifScopes, ElseScope, Conditional, While, Statement, Block, Scope, ProtoParser, ProtoInteger, ProtoString, ProtoData, TopLevelProtoDefinition
 
 def identifier_fn(s,l,t):
   return Identifier(t[0])
@@ -83,6 +84,47 @@ any_keyword = if_ | elif_ | else_ | return_ | define | while_ | true | false
 identifier = Word(alphas+'_',alphanums+"_")
 identifier.setParseAction(identifier_fn)
 identifier.ignore(any_keyword)
+
+# Proto-specific parsing
+def proto_integer_fn(s,l,t):
+  return ProtoInteger(int(t[0]))
+def proto_string_fn(s,l,t):
+  return String(t[0])
+def proto_data_fn(s,l,t):
+  return ProtoData(t[0])
+def top_level_proto_definition_fn(s,l,t):
+  return TopLevelProtoDefinition(t[0], t[1])
+def nested_proto_fn(s,l,t):
+  return NestedProto(t[0], t[1])
+def proto_parser_fn(s,l,t):
+  return ProtoParser(t)
+
+
+proto_integer = Regex(r"[+-]?\d+")
+proto_integer.setParseAction(proto_integer_fn)
+
+LBRACE = Suppress('{')
+RBRACE = Suppress('}')
+COLON = Suppress(':')
+
+proto_string = copy.copy(dblQuotedString)
+proto_string.setParseAction(proto_string_fn)
+
+proto_data = proto_integer | proto_string
+proto_data.setParseAction(proto_data_fn)
+
+top_level_proto_definition = identifier + COLON + proto_data
+top_level_proto_definition.setParseAction(top_level_proto_definition_fn)
+
+nested_proto = Forward()
+nested_proto.setParseAction(nested_proto_fn)
+proto_parser = ZeroOrMore(top_level_proto_definition | nested_proto)
+proto_parser.setParseAction(proto_parser_fn)
+
+nested_proto << identifier + LBRACE + proto_parser + RBRACE
+
+# End proto-specific parsing
+
 field = delimitedList(identifier, '.')
 field.setParseAction(field_fn)
 array_ref = field + Suppress('[') + Word(nums) + Suppress(']')
@@ -93,7 +135,7 @@ string = copy.copy(dblQuotedString)
 string.setParseAction(string_fn)
 boolean = (true | false)
 boolean.setParseAction(boolean_fn)
-proto = field + Suppress('<') + text_format_parser.parser + Suppress('>')
+proto = field + Suppress('<') + proto_parser + Suppress('>')
 proto.setParseAction(proto_fn)
 
 call = Forward()

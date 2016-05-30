@@ -19,7 +19,6 @@ py_library(
     ],
     deps = [
         "//external:pyparsing",
-        "//protocall/proto/text_format_parser",
     ],
 )
 

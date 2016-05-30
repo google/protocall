@@ -430,3 +430,89 @@ class Scope:
 
   def __repr__(self):
     return "{ %s }" % (repr(self.scope))
+
+# Proto-specific AST:
+
+class ProtoInteger:
+  def __init__(self, value):
+    self.value = value
+
+  def __getitem__(self, item):
+    if item == 0:
+      return self.value
+    else:
+      raise IndexError
+
+  def __repr__(self):
+    return str(self.value)
+
+class ProtoString:
+  def __init__(self, value):
+    self.value = value
+
+  def __getitem__(self, item):
+    if item == 0:
+      return self.value
+    else:
+      raise IndexError
+
+  def __repr__(self):
+    return self.value
+
+class ProtoData:
+  def __init__(self, value):
+    self.value = value
+
+  def __getitem__(self, item):
+    if item == 0:
+      return self.value
+    else:
+      raise IndexError
+
+  def __repr__(self):
+    return str(self.value)
+
+class TopLevelProtoDefinition:
+  def __init__(self, identifier, data):
+    self.identifier = identifier
+    self.data = data
+
+  def __getitem__(self, item):
+    if item == 0:
+      return self.identifier
+    elif item == 1:
+      return self.data
+    else:
+      raise IndexError
+
+  def __repr__(self):
+    return "%s: %s" % (self.identifier, self.data)
+
+class NestedProto:
+  def __init__(self, identifier, parser):
+    self.identifier = identifier
+    self.parser = parser
+
+  def __getitem__(self, item):
+    if item == 0:
+      return self.identifier
+    if item == 1:
+      return self.parser
+    else:
+      raise IndexError
+
+  def __repr__(self):
+    return "%s { %s }" % (self.identifier, self.parser)
+
+class ProtoParser:
+  def __init__(self, values):
+    self.values = values
+
+  def __getitem__(self, item):
+    if item == 0:
+      return self.values
+    else:
+      raise IndexError
+
+  def __repr__(self):
+    return " ".join(["%s" % value for value in self.values])
