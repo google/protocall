@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import copy
-from pyparsing import nestedExpr, Forward, Word, alphas, nums, oneOf, Literal, operatorPrecedence, opAssoc, infixNotation, Suppress, delimitedList, And, Group, OneOrMore, Optional, Or, ZeroOrMore, ParseResults, Keyword, dblQuotedString, cStyleComment, pythonStyleComment
+from pyparsing import nestedExpr, Forward, Word, alphas, nums, alphanums, oneOf, Literal, operatorPrecedence, opAssoc, infixNotation, Suppress, delimitedList, And, Group, OneOrMore, Optional, Or, ZeroOrMore, ParseResults, Keyword, dblQuotedString, cStyleComment, pythonStyleComment
 from AST import Identifier, Field, ArrayRef, Integer, String, Boolean, Proto, Array, SignOperator, ArithmeticOperator, ComparisonOperator, Expression, Assignment, ArrayAssignment, Call, Return, Define, IfScope, ElifScope, ElifScopes, ElseScope, Conditional, While, Statement, Block, Scope
 from protocall.proto.text_format_parser import text_format_parser
 
@@ -80,7 +80,7 @@ true = Keyword("true")
 false = Keyword("false")
 any_keyword = if_ | elif_ | else_ | return_ | define | while_ | true | false
 
-identifier = Word(alphas+'_')
+identifier = Word(alphas+'_',alphanums+"_")
 identifier.setParseAction(identifier_fn)
 identifier.ignore(any_keyword)
 field = delimitedList(identifier, '.')
