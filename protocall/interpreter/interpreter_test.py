@@ -289,7 +289,7 @@ def test_proto_operator_code_test():
     return result
 
 
-class RuntimeTest(unittest.TestCase):
+class InterpreterTest(unittest.TestCase):
   def testBasicCodeTest(self):
     assert test_basic_code_test().atom.literal.integer.value == 6
   def testWhileCodeTest(self):
