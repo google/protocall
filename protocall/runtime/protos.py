@@ -12,13 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from protocall.proto import protocall_pb2
+from protocall.proto import types_pb2
 from protocall.proto import test_pb2
 from google.protobuf import text_format
 
+# TODO dek: add API to register types, so test types and UDT can be registered at runtime.
+
 protos = {
   'Person': test_pb2.Person,
-  'Integer': test_pb2.Integer,
-  'String': test_pb2.String,
+  'Integer': types_pb2.Integer,
+  'String': types_pb2.String,
 }
 
 def parse_proto(text, message_name):

@@ -38,5 +38,6 @@ py_library(
     deps = [
         "//protocall/proto:protocall_proto_pb2",
         "//protocall/proto:test_proto_pb2",
+        "//protocall/proto:types_proto_pb2",
     ],
 )

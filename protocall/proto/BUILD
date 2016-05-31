@@ -28,3 +28,11 @@ py_proto_library(
     protoc = "//google/protobuf:protoc",
     visibility = ["//visibility:public"],
 )
+
+py_proto_library(
+    name = "types_proto_pb2",
+    srcs = ["types.proto"],
+    default_runtime = "//google/protobuf:protobuf_python",
+    protoc = "//google/protobuf:protoc",
+    visibility = ["//visibility:public"],
+)
