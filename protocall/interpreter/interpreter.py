@@ -23,7 +23,7 @@ from protocall.interpreter.grammar import block, scope
 from protocall.runtime import vm
 
 pr = vm.Protocall()
-# pr.enable_tracing()
+#pr.enable_tracing()
 
 if len(sys.argv) == 1:
   while True:

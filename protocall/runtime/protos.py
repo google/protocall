@@ -29,4 +29,5 @@ def parse_proto(text, message_name):
     p = protos[message_name]()
     text_format.Merge(text, p)
     return p
-  raise RuntimeError, message_name
+  import pdb; pdb.set_trace()
+  raise RuntimeError("message name is: '" + message_name + "'")

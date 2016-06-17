@@ -39,6 +39,7 @@ class Protocall:
 
   def execute(self, block):
     for statement in block.statement:
+      print "statement:", statement
       if self.tracing:
         print "hit ENTER for statement:"
         print text_format.MessageToString(statement, as_one_line=True)
@@ -103,7 +104,8 @@ class Protocall:
       except Exception as e:
         print "Execution failed at line:"
         print text_format.MessageToString(statement, as_one_line=True)
-        raise
+        import pdb; pdb.set_trace()
+        print "foo"
     return result
 
   def handle_atom(self, atom):
@@ -115,8 +117,6 @@ class Protocall:
       result = self.symbols.lookup_local(atom.field)
     elif atom.HasField("array_ref"):
       array = self.symbols.lookup_local(atom.array_ref.field)
-      print "array=", array
-      print atom.array_ref.index.value
       result = self.evaluate(array.element[atom.array_ref.index.value])
     else:
       raise RuntimeError
@@ -137,8 +137,13 @@ class Protocall:
     elif expression.HasField("call"):
       result = self.invoke(expression.call)
     elif expression.HasField("arithmetic_operator"):
+      print "evaluate arithmetic operator"
+      print "left before=", expression.arithmetic_operator.left
+      print "right before=", expression.arithmetic_operator.right
       left = self.evaluate(expression.arithmetic_operator.left)
       right = self.evaluate(expression.arithmetic_operator.right)
+      print "left=", left
+      print "right=", right
       r = arithmetic_operators[expression.arithmetic_operator.operator](left, right)
       result = protocall_pb2.Atom()
       result.literal.CopyFrom(r)
@@ -150,6 +155,8 @@ class Protocall:
       result.literal.CopyFrom(r)
     else:
       raise RuntimeError
+      import pdb; pdb.set_trace()
+      print "expression:", expression
     return result
 
   def invoke(self, call):
@@ -183,6 +190,7 @@ class Protocall:
     return result
 
   def assignment(self, a):
+    print "assignment:", a
     e = self.evaluate(a.assignment.expression)
     if isinstance(e, protocall_pb2.Expression):
       e = e.atom

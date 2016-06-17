@@ -15,32 +15,41 @@ from protocall.proto import protocall_pb2
 from google.protobuf import message
 def value(literal):
     if isinstance(literal, protocall_pb2.Expression) and literal.HasField("atom"):
-        return value(literal.atom.literal)
+        result = value(literal.atom.literal)
     elif isinstance(literal, protocall_pb2.Expression) and literal.HasField("arithmetic_operator"):
-        return literal.arithmetic_operator
+        result = literal.arithmetic_operator
     elif isinstance(literal, protocall_pb2.Expression) and literal.HasField("comparison_operator"):
-        return literal.comparison_operator
+        result =  literal.comparison_operator
     elif isinstance(literal, protocall_pb2.Expression) and literal.HasField("expression"):
-        return literal.expression
+        result = literal.expression
     elif isinstance(literal, protocall_pb2.Literal) and literal.HasField("integer"):
-        return literal.integer.value
+        result = literal.integer.value
     elif isinstance(literal, protocall_pb2.Literal) and literal.HasField("string"):
-        return literal.string.value
+        result = literal.string.value
     elif isinstance(literal, protocall_pb2.Literal) and literal.HasField("array"):
-        return '[ ' + ", ".join([str(value(element)) for element in literal.array.element]) + ' ]'
+        result = '[ ' + ", ".join([str(value(element)) for element in literal.array.element]) + ' ]'
+    elif isinstance(literal, protocall_pb2.Literal) and literal.HasField("proto"):
+        print "XXX"
+        print "literal:", literal
+        result = literal.proto
     elif isinstance(literal, protocall_pb2.Atom):
-        return value(literal.literal)
+        result = value(literal.literal)
     elif isinstance(literal, int):
-        return literal
+        result = literal
     elif isinstance(literal, str):
-        return literal
+        result = literal
     elif isinstance(literal, unicode):
-        return literal
+        result = literal
     elif isinstance(literal, float):
-        return literal
+        result = literal
     elif isinstance(literal, message.Message):
-        return str(literal)
+        print "YYY"
+        result = literal
+    elif isinstance(literal, None):
+        print "Warning: None value."
+        result = None
     else:
         print literal.__class__
         import pdb; pdb.set_trace()
         raise RuntimeError
+    return result

@@ -26,7 +26,16 @@ def minus(left, right):
 
 def multiply(left, right):
     result = protocall_pb2.Literal()
-    result.integer.value = value(left) * value(right)
+    print "multiply"
+    print "left=",type(left)
+    print "right=",type(right)
+    v_left = value(left)
+    v_right = value(right)
+    print "v_left=", type(v_left)
+    print "v_right=", type(v_right)
+    result = v_left * v_right
+    print "result=", result
+    result.integer.value = result
     return result
 
 def divide(left, right):

@@ -250,7 +250,7 @@ def test_proto_assignment_code_test():
     print "Result=", result
     return result
 
-def test_proto_operator_code_test():
+def test_proto_while_code_test():
     s = """
 {
   x = Integer<value: 0>;
@@ -281,6 +281,35 @@ def test_proto_operator_code_test():
 
 }
 """
+
+def test_factorial_code_test():
+    s = """
+{
+  define factorial {
+
+    if (x.value==0)
+    {
+      return 1;
+    }
+    else
+    {
+      y= x.value * factorial(x=x.value-1);
+      return y;
+    };
+  };
+  x = Integer<value: 12>;
+  y = factorial(x=x);
+  return y;
+}
+
+"""
+    pr = Protocall()
+    result = grammar.scope.parseString(s)
+    sc = parser_converter.convert_scope(result[0].scope)
+    result = pr.execute(sc.block)
+    print "Result=", result
+    return result
+
     pr = Protocall()
     result = grammar.scope.parseString(s)
     sc = parser_converter.convert_scope(result[0].scope)
@@ -290,28 +319,30 @@ def test_proto_operator_code_test():
 
 
 class InterpreterTest(unittest.TestCase):
-  def testBasicCodeTest(self):
-    assert test_basic_code_test().atom.literal.integer.value == 6
-  def testWhileCodeTest(self):
-    assert test_while_code_test().atom.literal.integer.value == 0
-  def testFunctionCodeTest(self):
-    assert test_function_code_test().atom.literal.integer.value == 0
-  def testFibonacciCodeTest(self):
-    assert test_fibonacci_code_test().atom.literal.integer.value == 5
-  def testFactorialCodeTest(self):
-    assert test_factorial_code_test().atom.literal.integer.value == 479001600
-  def testDefineCodeTest(self):
-    assert test_define_code_test().atom.literal.integer.value == 0
-  def testArrayCodeTest(self):
-    assert test_array_code_test().atom.literal.integer.value == 5
-  def testArrayAppendCodeTest(self):
-    assert test_array_append_code_test().atom.literal.integer.value == 2
-  def testProtoCodeTest(self):
-    assert test_proto_code_test().atom.literal.integer.value == 7
-  def testProtoAssignmentCodeTest(self):
-    assert test_proto_assignment_code_test().atom.literal.integer.value == 0
+  # def testBasicCodeTest(self):
+  #   assert test_basic_code_test().atom.literal.integer.value == 6
+  # def testWhileCodeTest(self):
+  #   assert test_while_code_test().atom.literal.integer.value == 0
+  # def testFunctionCodeTest(self):
+  #   assert test_function_code_test().atom.literal.integer.value == 0
+  # def testFibonacciCodeTest(self):
+  #   assert test_fibonacci_code_test().atom.literal.integer.value == 5
+  # def testFactorialCodeTest(self):
+  #   assert test_factorial_code_test().atom.literal.integer.value == 479001600
+  # def testDefineCodeTest(self):
+  #   assert test_define_code_test().atom.literal.integer.value == 0
+  # def testArrayCodeTest(self):
+  #   assert test_array_code_test().atom.literal.integer.value == 5
+  # def testArrayAppendCodeTest(self):
+  #   assert test_array_append_code_test().atom.literal.integer.value == 2
+  # def testProtoCodeTest(self):
+  #   assert test_proto_code_test().atom.literal.integer.value == 7
+  # def testProtoAssignmentCodeTest(self):
+  #   assert test_proto_assignment_code_test().atom.literal.integer.value == 0
+  # def testProtoOperatorCodeTest(self):
+  #   assert test_proto_while_code_test().atom.literal.integer.value == 0
   def testProtoOperatorCodeTest(self):
-    assert test_proto_operator_code_test().atom.literal.integer.value == 0
+    assert test_factorial_code_test().atom.literal.integer.value == 479001600
 
 
 if __name__ == '__main__':
