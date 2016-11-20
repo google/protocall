@@ -47,7 +47,7 @@ class ArrayRef:
   def __getitem__(self, item):
     if item == 0:
       return self.field
-    if item == 0:
+    if item == 1:
       return self.index
     else:
       raise IndexError
